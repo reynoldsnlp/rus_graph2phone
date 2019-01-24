@@ -4,7 +4,7 @@ vowels = 'аоэуияёеюы'
 vow_ak = 'ао'
 consonants = ''
 
-def softness(word) {
+def softness(word):
     word = re.sub(r'(?<=(\s|[' + vowels + 'ьъ]))ю','йу',word)
     word = re.sub(r'(?<=(\s|[' + vowels + 'ьъ]))е','йэ',word)
     word = re.sub(r'(?<=(\s|[' + vowels + 'ьъ]))я','йа',word)
@@ -19,11 +19,11 @@ def softness(word) {
     word = re.sub(r'ё','\'о',word)
 
     '''(?<![жчщшцй\s])и'''
-}
+    return word
 
 
-def akanje() {
+def akanje()
     akanje1 = r'[' + vow_ak + '](?!́)(?=(?=.*[' + vowels + '].*(о́|а́))|\b)'
     akanje2 = r'[оа](?!́)(?=[^оа]*(о́|а́))'
 
-}
+    return akanje2
