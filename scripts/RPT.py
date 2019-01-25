@@ -1,26 +1,36 @@
 import re
 
 vowels = 'аоэуияёеюы'
+accented_vowels = 'а́о́э́у́и́я́ёе́ю́ы́'
 vow_ak = 'ао'
 consonants = ''
 
 def softness(word):
-    word = re.sub(r'(?<=(\s|[' + vowels + 'ьъ]))ю','йу',word)
-    word = re.sub(r'(?<=(\s|[' + vowels + 'ьъ]))е','йэ',word)
-    word = re.sub(r'(?<=(\s|[' + vowels + 'ьъ]))я','йа',word)
-    word = re.sub(r'(?<=(\s|[' + vowels + 'ьъ]))ё','йо',word)
+    word = re.sub(r'\bю','йу',word)
+    word = re.sub(r'\bя','йа',word)
+    word = re.sub(r'\bе','йэ',word)
+    word = re.sub(r'\bё','йо́',word)
+
+    word = re.sub(r'(?<=[' + vowels + accented_vowels + 'ьъ])ю','йу',word)
+    word = re.sub(r'(?<=[' + vowels + accented_vowels + 'ьъ])е','йэ',word)
+    word = re.sub(r'(?<=[' + vowels + accented_vowels + 'ьъ])я','йа',word)
+    word = re.sub(r'(?<=[' + vowels + accented_vowels + 'ьъ])ё','йо́',word)
     word = re.sub(r'(?<=[ьъ])и','йи',word)
 
-    word = re.sub(r'ь','\'',word)
+    word = re.sub(r'(?<=[^йчщ])ь','\'',word)
+    word = re.sub(r'(?<=[йчщ])ь','',word)
     word = re.sub(r'ъ','',word)
-    word = re.sub(r'ю','\'у',word)
-    word = re.sub(r'я','\'а',word)
-    word = re.sub(r'е','\'э',word)
-    word = re.sub(r'ё','\'о',word)
+    word = re.sub(r'(?<=[^йчщ])ю','\'у',word)
+    word = re.sub(r'(?<=[^йчщ])я','\'а',word)
+    word = re.sub(r'(?<=[^йчщ])е','\'э',word)
+    word = re.sub(r'(?<=[^йчщ])ё','\'о́',word)
+    word = re.sub(r'(?<=[йчщ])ё','о́',word)
+    word = re.sub(r'(?<=[йчщ])ю','у',word)
+    word = re.sub(r'(?<=[йчщ])я','а',word)
+    word = re.sub(r'(?<=[йчщ])е','э',word)
+    word = re.sub(r'(?<=[^йчщжшц'+vowels+accented_vowels+'])и','\'и', word)
 
-    '''(?<![жчщшцй\s])и'''
     return word
-
 
 def akanje()
     akanje1 = r'[' + vow_ak + '](?!́)(?=(?=.*[' + vowels + '].*(о́|а́))|\b)'
