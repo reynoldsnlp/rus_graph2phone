@@ -32,7 +32,7 @@ def softness(word):
 
     return word
 
-def akanje()
+def akanje():
     akanje1 = r'[' + vow_ak + '](?!́)(?=(?=.*[' + vowels + '].*(о́|а́))|\b)'
     akanje2 = r'[оа](?!́)(?=[^оа]*(о́|а́))'
 
