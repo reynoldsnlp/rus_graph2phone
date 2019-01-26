@@ -17,8 +17,8 @@ def softness(word):
     word = re.sub(r'(?<=[' + vowels + accented_vowels + 'ьъ])ё','йо́',word)
     word = re.sub(r'(?<=[ьъ])и','йи',word)
 
-    word = re.sub(r'(?<=[^йчщ])ь','\'',word)
-    word = re.sub(r'(?<=[йчщ])ь','',word)
+    word = re.sub(r'(?<=[^йчщжшц])ь','\'',word)
+    word = re.sub(r'(?<=[йчщжшц])ь','',word)
     word = re.sub(r'ъ','',word)
     word = re.sub(r'(?<=[^йчщ])ю','\'у',word)
     word = re.sub(r'(?<=[^йчщ])я','\'а',word)
@@ -28,8 +28,14 @@ def softness(word):
     word = re.sub(r'(?<=[йчщ])ю','у',word)
     word = re.sub(r'(?<=[йчщ])я','а',word)
     word = re.sub(r'(?<=[йчщ])е','э',word)
-    word = re.sub(r'(?<=[^йчщжшц'+vowels+accented_vowels+'])и','\'и', word)
+    word = re.sub(r'(?<=[^йчщжшц' + vowels + accented_vowels + '])и','\'и', word)
 
+    return word
+
+def assimilation_of_softness(word):
+    word = re.sub(r'([дтсзлнцр])(?=[дтсзлнцр]\')',r"\1'",word)
+    word = re.sub(r'([мпбвф])(?=[мпбвф]\')',r"\1'",word)
+    word = re.sub(r'([кгх])(?=[кгх]\')',r"\1'",word)
     return word
 
 def akanje():
