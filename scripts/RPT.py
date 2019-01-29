@@ -20,11 +20,11 @@ def softness(word):
     word = re.sub(r'(?<=[^йчщжшц])ь','\'',word)
     word = re.sub(r'(?<=[йчщжшц])ь','',word)
     word = re.sub(r'ъ','',word)
-    word = re.sub(r'(?<=[^йчщ])ю','\'у',word)
-    word = re.sub(r'(?<=[^йчщ])я','\'а',word)
+    word = re.sub(r'(?<=[^йчщ])ю','\'у',word)  # unnecessary?
+    word = re.sub(r'(?<=[^йчщ])я','\'а',word)  # unnecessary?
     word = re.sub(r'(?<=[^йчщ])е','\'э',word)
     word = re.sub(r'(?<=[^йчщ])ё','\'о́',word)
-    word = re.sub(r'(?<=[йчщ])ё','о́',word)
+    word = re.sub(r'(?<=[йчщ])ё','о́',word)  # put ' after inherently soft
     word = re.sub(r'(?<=[йчщ])ю','у',word)
     word = re.sub(r'(?<=[йчщ])я','а',word)
     word = re.sub(r'(?<=[йчщ])е','э',word)
