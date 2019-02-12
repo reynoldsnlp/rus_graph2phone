@@ -5,12 +5,22 @@ Alphabet
 
       P S ! as in, PS
 
-      А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я
-      А́         Е́ Ё́     И́           О́         У́               Ы́   Э́ Ю́ Я́
-      А̀         Ѐ Ё̀     Ѝ           О̀         У̀               Ы̀   Э̀ Ю̀ Я̀
-      а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
-      а́         е́ ё́     и́           о́         у́               ы́   э́ ю́ я́   ! ё́ is not currently used, since = ё
-      а̀         ѐ ё̀     ѝ           о̀         у̀               ы̀   э̀ ю̀ я̀ ;
+      Б  В  Г  Д  Ж З  Й  К  Л  М  Н  П  Р  С  Т  Ф  Х  Ц Ч  Ш Щ
+      Б' В' Г' Д'   З' Й' К' Л' М' Н' П' Р' С' Т' Ф' Х'   Ч'   Щ'
+      Ъ Ь
+      А Е  Ё  И  О У Ы Э Ю  Я
+      А́ Е́  Ё́  И́  О́ У́ Ы́ Э́ Ю́  Я́
+      А̀ Ѐ  Ё̀  Ѝ  О̀ У̀ Ы̀ Э̀ Ю̀  Я̀
+        ЙЭ ЙО ЙИ         ЙУ ЙА  ! TODO is there a ЙИ?
+        ЙЭ́ ЙО́ ЙИ́         ЙУ́ ЙА́
+      б  в  г  д  ж з  й  к  л  м  н  п  р  с  т  ф  х  ц ч  ш щ
+      б' в' г' д'   з' й' к' л' м' н' п' р' с' т' ф' х'   ч'   щ'
+      ъ ь
+      а е  ё  и  о у ы э ю  я
+      а́ е́  ё́  и́  о́ у́ ы́ э́ ю́  я́   ! ё́ is not currently used, since = ё
+      а̀ ѐ  ё̀  ѝ  о̀ у̀ ы̀ э̀ ю̀  я̀
+        йэ йо йи         йу йа
+        йэ́ йо́ йи́         йу́ йа́ ;
 
 Sets
 
@@ -21,39 +31,59 @@ Letter = А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц
          а́         е́ ё́     и́           о́         у́               ы́   э́ ю́ я́
          а̀         ѐ ё̀     ѝ           о̀         у̀               ы̀   э̀ ю̀ я̀
          %- %  ;
+
 ! Consonants
 C = Б В Г Д Ж З Й К Л М Н П Р С Т Ф Х Ц Ч Ш Щ
     б в г д ж з й к л м н п р с т ф х ц ч ш щ ;
+
 ! Consonants, excluding { Д д Т т }
 CNoDT = Б В Г Ж З Й К Л М Н П Р С Ф Х Ц Ч Ш Щ
         б в г ж з й к л м н п р с ф х ц ч ш щ ;
+
 ! Consonants
 CNoHard = Б В Г Д З Й К Л М Н П Р С Т Ф Х Ч Щ
           б в г д з й к л м н п р с т ф х ч щ ;
+
 ! Consonants, excluding { Ж ж Й й Ч ч Ш ш Щ щ Ц ц }
 CNoSoftHard = Б В Г Д З К Л М Н П Р С Т Ф Х
               б в г д з к л м н п р с т ф х ;
+
 ! Unvoiced consonants
 UnvoicedC = К П С Т Ф Х Ц Ч Ш Щ
             к п с т ф х ц ч ш щ ;
+
 ! Soft consonants
 SoftC = Й Ч Щ
         й ч щ ;
+
 ! Hard consonants
 HardC = Ж Ц Ш
         ж ц ш ;
+
 ! Hushers
 HUSH = Ж Ш Щ Ч
        ж ш щ ч ;
+
 ! Velars
 VEL = Г К Х
       г к х ;
+
 ! Paired consonants (consonants that have both a hard and soft variant, excluding Velars)
 PC = Б В Д З Л М Н П Р С Т Ф
      б в д з л м н п р с т ф ;
+
+! Paired and inherently soft consonants (without soft marking)
+PCandSoft_H = Б  В  Г  Д  З  Й  К  Л  М  Н  П  Р  С  Т  Ф  Х  Ч  Щ
+              б  в  г  д  з  й  к  л  м  н  п  р  с  т  ф  х  ч  щ ;
+
+! Paired and inherently soft consonants (with soft marking)
+PCandSoft_S = Б' В' Г' Д' З' Й' К' Л' М' Н' П' Р' С' Т' Ф' Х' Ч' Щ'
+              б' в' г' д' з' й' к' л' м' н' п' р' с' т' ф' х' ч' щ' ;
+
 ! Paired consonants, excluding { Н н }
 PCNoN = Б В Д З Л М П Р С Т Ф
         б в д з л м п р с т ф ;
+
 ! Vowels
 V = А Е Ё И О У Ы Э Ю Я
     А́ Е́ Ё́ И́ О́ У́ Ы́ Э́ Ю́ Я́
@@ -61,15 +91,21 @@ V = А Е Ё И О У Ы Э Ю Я
     а е ё и о у ы э ю я
     а́ е́ ё́ и́ о́ у́ ы́ э́ ю́ я́
     а̀ ѐ ё̀ ѝ о̀ у̀ ы̀ э̀ ю̀ я̀ ;
+
 ! Stressed vowels
 StressedV = А́ Е́ Ё́ Ё И́ О́ У́ Ы́ Э́ Ю́ Я́
             а́ е́ ё́ ё и́ о́ у́ ы́ э́ ю́ я́ ;
+
 ! Unstressed vowels
 UnstressedV = А Е И О У Ы Э Ю Я
               а е и о у ы э ю я ;
+
 ! Vowels that indicate softness
 SoftV = Е Ё И Ю Я
-        е ё и ю я ;
+        Е́ Ё́ И́ Ю́ Я́
+        е ё и ю я
+        е́ ё́ и́ ю́ я́ ;
+
 ! Vowels that indicate hardness
 HardV = А О У Ы Э
         а о у ы э ;
@@ -85,20 +121,20 @@ Rules
 
 !! ==> 001 <==
 !! ============================================================================
-"Softness after consonants, excluding { Ж ж Ц ц Ш ш }"
-Vx:'Vy <=> CNoHard _ ;
+"Soften consonants before 'soft' vowels and ь (excluding { Ж ж Ц ц Ш ш })"
+Cx:Cy <=> _ [ SoftV | ь: ] ;
 !!€ ся́ду
 !!€ с'а́ду
 !!€ твёрдый
 !!€ тв'о́рдый
 
-where Vx in ( Я́ я́ Е́ е́ Ё́ Ё ё́ ё И́ и́ Ю́ ю́ Я я Е е И и Ю ю Ь ь )
-      Vy in ( А́ а́ Э́ э́ О́ О́ о́ о́ И́ и́ У́ у́ А а Э э И и У у 0 0 )
+where Cx in PCandSoft_H
+      Cy in PCandSoft_S
     matched ;
 
 !! ==> 002 <==
 !! ============================================================================
-"Softness after vowels"
+"й between vowels"
 [ Vx:ЙVy | Va:йVb ] <=> [ V | Ъ | Ъ | .#. ] _ ;
 
 where Vx in ( Я́ Е́ Ё́ Ё И́ Ю́ Я Е И Ю )

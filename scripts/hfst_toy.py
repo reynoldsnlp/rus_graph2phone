@@ -13,7 +13,7 @@ def test_RPT(words):
     hfst.compile_twolc_file('g2p.twolc','g2p.hfst')
     test = hfst.HfstInputStream('g2p.hfst')
     fsts = []
-    fst = null
+    fst = None
     if not (test.eof()):
         fst = test.read()
     while not (test.is_eof()):
@@ -23,7 +23,7 @@ def test_RPT(words):
     for word in word:
         fst_word = fst.lookup(word[0])
         good_fst = (word[1] == fst_word)
-        if(!good_fst):
+        if not good_fst:
             print('Failed: {} :==> {} != {}'.format(word[0],word[1],fst_word))
 
 text = read_from_csv()
