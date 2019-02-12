@@ -27,9 +27,21 @@ C = Б В Г Д Ж З Й К Л М Н П Р С Т Ф Х Ц Ч Ш Щ
 ! Consonants, excluding { Д д Т т }
 CNoDT = Б В Г Ж З Й К Л М Н П Р С Ф Х Ц Ч Ш Щ
         б в г ж з й к л м н п р с ф х ц ч ш щ ;
+! Consonants
+CNoHard = Б В Г Д З Й К Л М Н П Р С Т Ф Х Ч Щ
+          б в г д з й к л м н п р с т ф х ч щ ;
+! Consonants, excluding { Ж ж Й й Ч ч Ш ш Щ щ Ц ц }
+CNoSoftHard = Б В Г Д З К Л М Н П Р С Т Ф Х
+              б в г д з к л м н п р с т ф х ;
 ! Unvoiced consonants
 UnvoicedC = К П С Т Ф Х Ц Ч Ш Щ
             к п с т ф х ц ч ш щ ;
+! Soft consonants
+SoftC = Й Ч Щ
+        й ч щ ;
+! Hard consonants
+HardC = Ж Ц Ш
+        ж ц ш ;
 ! Hushers
 HUSH = Ж Ш Щ Ч
        ж ш щ ч ;
@@ -55,20 +67,69 @@ StressedV = А́ Е́ Ё́ Ё И́ О́ У́ Ы́ Э́ Ю́ Я́
 ! Unstressed vowels
 UnstressedV = А Е И О У Ы Э Ю Я
               а е и о у ы э ю я ;
+! Vowels that indicate softness
+SoftV = Е Ё И Ю Я
+        е ё и ю я ;
+! Vowels that indicate hardness
+HardV = А О У Ы Э
+        а о у ы э ;
+
 
 Definitions
+Beginning = [ а́:0 | о́:0 | а:0 | о:0 | я́:0 | ё:0 | е́:0 | я:0 | е:0 | ь:0 | й:0 ] ;
 
 
 Rules
+! Rules 1-4: Softness
+!
+
+!! ==> 001 <==
 !! ============================================================================
-"test"
-Vx:Vy <=> :* _ :* ;
-where Vx in ( а́ э́ о́ у́ ы́ я́ е́ ё ю́ и́ )
-      Vy in ( а э о у ы я е е ю и )
+"Softness after consonants, excluding { Ж ж Ц ц Ш ш }"
+Vx:'Vy <=> CNoHard _ ;
+!!€ ся́ду
+!!€ с'а́ду
+!!€ твёрдый
+!!€ тв'о́рдый
+
+where Vx in ( Я́ я́ Е́ е́ Ё́ Ё ё́ ё И́ и́ Ю́ ю́ Я я Е е И и Ю ю Ь ь )
+      Vy in ( А́ а́ Э́ э́ О́ О́ о́ о́ И́ и́ У́ у́ А а Э э И и У у 0 0 )
     matched ;
 
-"test2"
-Vx:Vy <=> :* _ :* ;
-where Vx in ( с )
-      Vy in ( з )
+!! ==> 002 <==
+!! ============================================================================
+"Softness after vowels"
+[ Vx:ЙVy | Va:йVb ] <=> [ V | Ъ | Ъ | .#. ] _ ;
+
+where Vx in ( Я́ Е́ Ё́ Ё И́ Ю́ Я Е И Ю )
+      Vy in ( А́ Э́ О́ О́ И́ У́ А Э И У )
     matched ;
+where Va in ( я́ е́ ё́ ё и́ ю́ я е и ю )
+      Vb in ( а́ э́ о́ о́ и́ у́ а э и у )
+    matched ;
+
+!! ==> 003 <==
+!! ============================================================================
+"Remove ъ and Ъ"
+[ Ъ:0 | ъ:0 ] <=> :* _ :* ;
+
+!! ==> 004 <==
+!! ============================================================================
+"Yeri rule: after hard consonants и is pronounced as ы"
+[ И́:Ы́ | И:Ы | и́:ы́ | и:ы ] <=> HardC _ ;
+
+!! ==> 005 <==
+!! ============================================================================
+"Unstressed vowel reduction for { о а я } in pre-tonic location"
+[ о:∆ | а:∆ | я:∆ ] <=> _ [ [ C ]+ | C* :й ] StressedV ;
+what about аи combination? The consonant doesn't show up here.
+
+!! ==> 006 <==
+!! ============================================================================
+"Unstressed vowel reduction for { о а } at beginning of word"
+[ о:∆ | а:∆ ] <=> .#. _ ;
+
+!! ==> 008 <==
+!! ============================================================================
+"Unstressed vowel reduction for { о а я } anywhere except at the beginning or pre-tonic location"
+[ о:ъ | а:ъ | я:ъ ] <=> .#. C+ _ .#. ;
