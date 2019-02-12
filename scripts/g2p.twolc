@@ -129,7 +129,7 @@ what about аи combination? The consonant doesn't show up here.
 "Unstressed vowel reduction for { о а } at beginning of word"
 [ о:∆ | а:∆ ] <=> .#. _ ;
 
-!! ==> 008 <==
+!! ==> 007 <==
 !! ============================================================================
 "Unstressed vowel reduction for { о а я } anywhere except at the beginning or pre-tonic location"
 [ о:ъ | а:ъ | я:ъ ] <=> .#. C+ _ .#. ;
