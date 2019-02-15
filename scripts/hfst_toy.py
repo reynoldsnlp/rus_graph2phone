@@ -2,7 +2,7 @@ import hfst
 import csv
 
 def read_from_csv():
-    datafile = open('../scripts/words.csv', 'r')
+    datafile = open('test.csv', 'r')
     datareader = csv.reader(datafile, delimiter=',')
     data = []
     for row in datareader:
@@ -34,4 +34,3 @@ if __name__ == '__main__':
     # text = read_from_csv()
     text = ['ся́ду', 'твёрдый', 'ю́бка', 'ба́юшки', 'опя́ть', 'съе́сть', 'жи́ть']
     test_RPT(text)
-
