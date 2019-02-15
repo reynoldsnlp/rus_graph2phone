@@ -21,7 +21,9 @@ def test_RPT(words):
     for fstrans in fsts:
         fst.intersect(fstrans)
     for inword in words:  # for inword, outword in words:
-        print(inword, fst.lookup(inword))
+        outwords = fst.lookup(inword)
+        print(inword, ', '.join([w.replace('@_EPSILON_SYMBOL_@', '') for w, wt
+                               in outwords]), sep='\t')
         # fst_word = fst.lookup(inword)
         # good_fst = (outword == fst_word)
         # if not good_fst:
@@ -30,6 +32,6 @@ def test_RPT(words):
 
 if __name__ == '__main__':
     # text = read_from_csv()
-    text = ['ся́ду', 'твёрдый', 'ю́бка', 'ба́юшки', 'мя́ть', 'объедини́ть', 'жи́ть']
+    text = ['ся́ду', 'твёрдый', 'ю́бка', 'ба́юшки', 'опя́ть', 'съе́сть', 'жи́ть']
     test_RPT(text)
 
