@@ -51,6 +51,14 @@ CNoSoftHard = Б В Г Д З К Л М Н П Р С Т Ф Х
 UnvoicedC = К П С Т Ф Х Ц Ч Ш Щ
             к п с т ф х ц ч ш щ ;
 
+! Unvoiced and paired consonants
+UnvoicedPairedC = К П С Т Ф Ш
+                  к п с т ф ш ;
+
+! Voiced and paired consonants
+VoicedPairedC = Г Б З Д В Ж
+                г б з д в ж ;
+
 ! Soft consonants
 SoftC = Й Ч Щ
         й ч щ ;
@@ -62,6 +70,18 @@ HardC = Ж Ц Ш
 ! Hushers
 HUSH = Ж Ш Щ Ч
        ж ш щ ч ;
+
+! Labials
+LAB = Б В М П Ф
+      б в м п ф ;
+
+! Dentals
+DEN = Д З Л Н Р С Т Ц
+      д з л н р с т ц ;
+
+! Palatals
+PAL = Ж Й Ч Ш
+      ж й ч ш ;
 
 ! Velars
 VEL = Г К Х
@@ -151,3 +171,25 @@ where Vx in ( о а )
       Vy in ( ʌ ʌ )
   matched ;
 
+
+
+!! ============================================================================
+"Assimilation: Final devoicing"
+ VoicedPairedC:UnvoicedPairedC <=>  [ _ .#. | _ ' .#. ] ;
+
+!! ============================================================================
+"Assimilation: Consonant clusters with unvoiced consonant at end of the cluster"
+VoicedPairedC:UnvoicedPairedC <=>  _ UnvoicedPairedC: ;
+
+!! ============================================================================
+"Assimilation: Consonant clusters with voiced consonant at end of the cluster"
+UnvoicedPairedC:VoicedPairedC <=>  _ Cx: ;
+where Cx in ( Г Б З Д Ж г б з д ж )
+
+!! ============================================================================
+"Softness Assimilation"
+TODO: Finish this
+Cx:Cy <==> [ Cx :
+where Cx in ( PCandSoftH )
+      Cy in ( PCandSoftS )
+    matched ;
