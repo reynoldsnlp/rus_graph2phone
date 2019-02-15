@@ -72,11 +72,11 @@ PC = Б В Д З Л М Н П Р С Т Ф
      б в д з л м н п р с т ф ;
 
 ! Paired and inherently soft consonants (without soft marking)
-PCandSoft_H = Б  В  Г  Д  З  Й  К  Л  М  Н  П  Р  С  Т  Ф  Х  Ч  Щ
+PCandSoftH = Б  В  Г  Д  З  Й  К  Л  М  Н  П  Р  С  Т  Ф  Х  Ч  Щ
               б  в  г  д  з  й  к  л  м  н  п  р  с  т  ф  х  ч  щ ;
 
 ! Paired and inherently soft consonants (with soft marking)
-PCandSoft_S = Б' В' Г' Д' З' Й' К' Л' М' Н' П' Р' С' Т' Ф' Х' Ч' Щ'
+PCandSoftS = Б' В' Г' Д' З' Й' К' Л' М' Н' П' Р' С' Т' Ф' Х' Ч' Щ'
               б' в' г' д' з' й' к' л' м' н' п' р' с' т' ф' х' ч' щ' ;
 
 ! Paired consonants, excluding { Н н }
@@ -124,8 +124,8 @@ Cx:Cy <=> _ [ SoftV: | ь: ] ;
 !!€ твёрдый
 !!€ тв'о́рдый
 
-where Cx in PCandSoft_H
-      Cy in PCandSoft_S
+where Cx in PCandSoftH
+      Cy in PCandSoftS
     matched ;
 
 !! ============================================================================
