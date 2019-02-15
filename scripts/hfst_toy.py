@@ -10,21 +10,26 @@ def read_from_csv():
     return data
 
 def test_RPT(words):
-    hfst.compile_twolc_file('g2p.twolc','g2p.hfst')
+    hfst.compile_twolc_file('g2p.twolc', 'g2p.hfst')
     test = hfst.HfstInputStream('g2p.hfst')
     fsts = []
     fst = None
-    if not (test.eof()):
+    if not test.is_eof():
         fst = test.read()
-    while not (test.is_eof()):
+    while not test.is_eof():
         fsts.append(test.read())
     for fstrans in fsts:
         fst.intersect(fstrans)
-    for word in word:
-        fst_word = fst.lookup(word[0])
-        good_fst = (word[1] == fst_word)
-        if not good_fst:
-            print('Failed: {} :==> {} != {}'.format(word[0],word[1],fst_word))
+    for inword in words:  # for inword, outword in words:
+        print(inword, fst.lookup(inword))
+        # fst_word = fst.lookup(inword)
+        # good_fst = (outword == fst_word)
+        # if not good_fst:
+        #     print('Failed: {} :==> {} != {}'.format(word[0],word[1],fst_word))
 
-text = read_from_csv()
-test_RPT(text)
+
+if __name__ == '__main__':
+    # text = read_from_csv()
+    text = ['ся́ду', 'твёрдый', 'ю́бка', 'ба́юшки', 'мя́ть', 'объедини́ть', 'жи́ть']
+    test_RPT(text)
+

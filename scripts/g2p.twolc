@@ -3,24 +3,23 @@ Alphabet
       %  ! space
       %-
 
-      P S ! as in, PS
-
       Б  В  Г  Д  Ж З  Й  К  Л  М  Н  П  Р  С  Т  Ф  Х  Ц Ч  Ш Щ
       Б' В' Г' Д'   З' Й' К' Л' М' Н' П' Р' С' Т' Ф' Х'   Ч'   Щ'
-      Ъ Ь
+      Ъ:0 Ь:0
       А Е  Ё  И  О У Ы Э Ю  Я
       А́ Е́  Ё́  И́  О́ У́ Ы́ Э́ Ю́  Я́
       А̀ Ѐ  Ё̀  Ѝ  О̀ У̀ Ы̀ Э̀ Ю̀  Я̀
-        ЙЭ ЙО ЙИ         ЙУ ЙА  ! TODO is there a ЙИ?
-        ЙЭ́ ЙО́ ЙИ́         ЙУ́ ЙА́
+        Йэ Йо Йи         Йу Йа
+        Йэ́ Йо́ Йи́         Йу́ Йа́
+! TODO convert lowercase special characters to uppercase
       б  в  г  д  ж з  й  к  л  м  н  п  р  с  т  ф  х  ц ч  ш щ
       б' в' г' д'   з' й' к' л' м' н' п' р' с' т' ф' х'   ч'   щ'
-      ъ ь
-      а е  ё  и  о у ы э ю  я
-      а́ е́  ё́  и́  о́ у́ ы́ э́ ю́  я́   ! ё́ is not currently used, since = ё
-      а̀ ѐ  ё̀  ѝ  о̀ у̀ ы̀ э̀ ю̀  я̀
-        йэ йо йи         йу йа
-        йэ́ йо́ йи́         йу́ йа́ ;
+      ъ:0 ь:0
+      а:ъ   е:ь  ё  и  о:ъ у ы э   ю  я:ь ʌ
+      а́   â е́    ё́  и́  о́   у́ ы́ э́ э̂ ю́  я́     ! ё́ is included to broaden coverage
+      а̀     ѐ    ё̀  ѝ  о̀   у̀ ы̀ э̀   ю̀  я̀
+            йэ:ь йо йи             йу йа:ь
+            йэ́   йо́ йи́             йу́ йа́ ;
 
 Sets
 
@@ -112,17 +111,14 @@ HardV = А О У Ы Э
 
 
 Definitions
+
 Beginning = [ а́:0 | о́:0 | а:0 | о:0 | я́:0 | ё:0 | е́:0 | я:0 | е:0 | ь:0 | й:0 ] ;
 
-
 Rules
-! Rules 1-4: Softness
-!
 
-!! ==> 001 <==
 !! ============================================================================
 "Soften consonants before 'soft' vowels and ь (excluding { Ж ж Ц ц Ш ш })"
-Cx:Cy <=> _ [ SoftV | ь: ] ;
+Cx:Cy <=> _ [ SoftV: | ь: ] ;
 !!€ ся́ду
 !!€ с'а́ду
 !!€ твёрдый
@@ -132,40 +128,26 @@ where Cx in PCandSoft_H
       Cy in PCandSoft_S
     matched ;
 
-!! ==> 002 <==
 !! ============================================================================
-"й between vowels"
-[ Vx:ЙVy | Va:йVb ] <=> [ V | Ъ | Ъ | .#. ] _ ;
+"ю>йу between vowels, word-initially, and after hard-/soft-signs"
+Vx:Vy <=> [ V: | Ъ: | Ъ: | .#. ] _ ;
 
-where Vx in ( Я́ Е́ Ё́ Ё И́ Ю́ Я Е И Ю )
-      Vy in ( А́ Э́ О́ О́ И́ У́ А Э И У )
-    matched ;
-where Va in ( я́ е́ ё́ ё и́ ю́ я е и ю )
-      Vb in ( а́ э́ о́ о́ и́ у́ а э и у )
+where Vx in ( Ю́  Ю  ю́  ю )
+      Vy in ( Йу́ Йу йу́ йу )
     matched ;
 
-!! ==> 003 <==
-!! ============================================================================
-"Remove ъ and Ъ"
-[ Ъ:0 | ъ:0 ] <=> :* _ :* ;
-
-!! ==> 004 <==
 !! ============================================================================
 "Yeri rule: after hard consonants и is pronounced as ы"
-[ И́:Ы́ | И:Ы | и́:ы́ | и:ы ] <=> HardC _ ;
+Vx:Vy <=> HardC _ ;
+where Vx in ( И́ И и́ и )
+      Vy in ( Ы́ Ы ы́ ы )
+  matched ;
 
-!! ==> 005 <==
 !! ============================================================================
-"Unstressed vowel reduction for { о а я } in pre-tonic location"
-[ о:∆ | а:∆ | я:∆ ] <=> _ [ [ C ]+ | C* :й ] StressedV ;
-what about аи combination? The consonant doesn't show up here.
+"Unstressed vowel reduction for { о а } in pre-tonic location and word-initially"
+Vx:Vy <=> _ [ [ C ]+ | C* :й ]? StressedV ;
+          .#. _ ;
+where Vx in ( о а )
+      Vy in ( ʌ ʌ )
+  matched ;
 
-!! ==> 006 <==
-!! ============================================================================
-"Unstressed vowel reduction for { о а } at beginning of word"
-[ о:∆ | а:∆ ] <=> .#. _ ;
-
-!! ==> 007 <==
-!! ============================================================================
-"Unstressed vowel reduction for { о а я } anywhere except at the beginning or pre-tonic location"
-[ о:ъ | а:ъ | я:ъ ] <=> .#. C+ _ .#. ;
