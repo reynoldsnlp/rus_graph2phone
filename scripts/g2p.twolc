@@ -174,7 +174,7 @@ where Vx in ( о а )
 
 !! ============================================================================
 "Voice Assimilation: Final devoicing"
-Cx:Cy <=>  [ _ .#. | _ ' .#. ] ;
+Cx:Cy <=>  _ .#. ;
 where Cx in VoicedPairedC
       Cy in ( П П' Ф Ф' К К' Т Т' Ш С С'
               п п' ф ф' к к' т т' ш с с' )
@@ -190,49 +190,42 @@ where Cx in VoicedPairedC
 
 !! ============================================================================
 "Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
-Cy:Cx <=>  _ :Cx ;
-where Cx in VoicedPairedC
-      Cy in ( П П' Ф Ф' К К' Т Т' Ш С С'
+Cx:Cy <=>  _ :Cy ;
+where Cx in ( П П' Ф Ф' К К' Т Т' Ш С С'
               п п' ф ф' к к' т т' ш с с' )
+      Cy in VoicedPairedC
   matched ;
-
 
 !! ============================================================================
 "Softness Assimilation: Dentals"
-TODO: Finish this
-Cx:Cy <==> [ Cx :
-where Cx in ( Д  З  Л  Н  П  Р  С  Т  Ф  Х  Ч  Щ
-              д  з  л  н  п  р  с  т  ф  х  ч  щ )
-      Cy in ( Б' В' Г' Д' З' Й' К' Л' М' Н' П' Р' С' Т' Ф' Х' Ч' Щ'
-              б' в' г' д' з' й' к' л' м' н' п' р' с' т' ф' х' ч' щ' )
+Cx:Cy <==> _ :Cy ;
+where Cx in ( Д  З  Л  Н  П  Р  С  Т
+              д  з  л  н  п  р  с  т  )
+      Cy in ( Д' З' Л' Н' П' Р' С' Т'
+              д' з' л' н' п' р' с' т' )
     matched ;
 
 !! ============================================================================
 "Softness Assimilation: Labials"
 TODO: Finish this
-Cx:Cy <==> [ Cx :
-where Cx in ( Б  В  Г  Д  З  Й  К  Л  М  Н  П  Р  С  Т  Ф  Х  Ч  Щ
-              б  в  г  д  з  й  к  л  м  н  п  р  с  т  ф  х  ч  щ  )
-      Cy in ( Б' В' Г' Д' З' Й' К' Л' М' Н' П' Р' С' Т' Ф' Х' Ч' Щ'
-              б' в' г' д' з' й' к' л' м' н' п' р' с' т' ф' х' ч' щ' )
+Cx:Cy <==> _ :Cy ;
+where Cx in ( Б  В  М  П  Ф
+              б  в  м  п  ф  )
+      Cy in ( Б' В' М' П' Ф'
+              б' в' м' п' ф' )
     matched ;
 
 !! ============================================================================
 "Softness Assimilation: Palatal"
-TODO: Finish this
-Cx:Cy <==> [ Cx :
-where Cx in ( Б  В  Г  Д  З  Й  К  Л  М  Н  П  Р  С  Т  Ф  Х  Ч  Щ
-              б  в  г  д  з  й  к  л  м  н  п  р  с  т  ф  х  ч  щ  )
-      Cy in ( Б' В' Г' Д' З' Й' К' Л' М' Н' П' Р' С' Т' Ф' Х' Ч' Щ'
-              б' в' г' д' з' й' к' л' м' н' п' р' с' т' ф' х' ч' щ' )
+Cx:Cy <==> _ :Cy ;
+where Cx in ( Й  Ч  й  ч  )
+      Cy in ( Й' Ч' й' ч' )
     matched ;
 
 !! ============================================================================
 "Softness Assimilation: Velar"
 TODO: Finish this
-Cx:Cy <==> [ Cx :
-where Cx in ( Б  В  Г  Д  З  Й  К  Л  М  Н  П  Р  С  Т  Ф  Х  Ч  Щ
-              б  в  г  д  з  й  к  л  м  н  п  р  с  т  ф  х  ч  щ )
-      Cy in ( Б' В' Г' Д' З' Й' К' Л' М' Н' П' Р' С' Т' Ф' Х' Ч' Щ'
-              б' в' г' д' з' й' к' л' м' н' п' р' с' т' ф' х' ч' щ' )
+Cx:Cy <==> _ :Cy ;
+where Cx in ( Г  К  Х  г  к  х  )
+      Cy in ( Г' К' Х' г' к' х' )
     matched ;
