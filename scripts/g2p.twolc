@@ -198,17 +198,16 @@ where Cx in ( П П' Ф Ф' К К' Т Т' Ш С С'
 
 !! ============================================================================
 "Softness Assimilation: Dentals"
-Cx:Cy <==> _ :Cy ;
-where Cx in ( Д  З  Л  Н  П  Р  С  Т
-              д  з  л  н  п  р  с  т  )
-      Cy in ( Д' З' Л' Н' П' Р' С' Т'
-              д' з' л' н' п' р' с' т' )
+Cx:Cy <=> _ :Cy ;
+where Cx in ( Д  З  Л  Н  Р  С  Т
+              д  з  л  н  р  с  т  )
+      Cy in ( Д' З' Л' Н' Р' С' Т'
+              д' з' л' н' р' с' т' )
     matched ;
 
 !! ============================================================================
 "Softness Assimilation: Labials"
-TODO: Finish this
-Cx:Cy <==> _ :Cy ;
+Cx:Cy <=> _ :Cy ;
 where Cx in ( Б  В  М  П  Ф
               б  в  м  п  ф  )
       Cy in ( Б' В' М' П' Ф'
@@ -217,15 +216,14 @@ where Cx in ( Б  В  М  П  Ф
 
 !! ============================================================================
 "Softness Assimilation: Palatal"
-Cx:Cy <==> _ :Cy ;
+Cx:Cy <=> _ :Cy ;
 where Cx in ( Й  Ч  й  ч  )
       Cy in ( Й' Ч' й' ч' )
     matched ;
 
 !! ============================================================================
 "Softness Assimilation: Velar"
-TODO: Finish this
-Cx:Cy <==> _ :Cy ;
+Cx:Cy <=> _ :Cy ;
 where Cx in ( Г  К  Х  г  к  х  )
       Cy in ( Г' К' Х' г' к' х' )
     matched ;
