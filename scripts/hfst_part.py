@@ -19,7 +19,7 @@ def test_RPT(words, rule1, rule2):
         fsts.append(test.read())
     fst = fsts[rule1]
     for rule_num in range(rule1+1,rule2+1):
-        fst.intersect(fstrans)
+        fst.intersect(fsts[rule_num])
     for inword in words:  # for inword, outword in words:
         outwords = fst.lookup(inword)
         print(inword, ', '.join([w.replace('@_EPSILON_SYMBOL_@', '') for w, wt
@@ -32,4 +32,4 @@ def test_RPT(words, rule1, rule2):
 
 if __name__ == '__main__':
     text = read_from_csv()
-    test_RPT(text, sys.argv[1], sys.argv[2])
+    test_RPT(text, int(sys.argv[1]), int(sys.argv[2]))

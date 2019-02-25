@@ -227,6 +227,7 @@ where Cx in ( Б Б' б б' В В' в в' Г Г' г г' Д Д' д д' Ж ж З �
 
 !! ============================================================================
 "Voice Assimilation: Consonant clusters with unvoiced consonant at end of the cluster"
+!TODO: В doesn't force softness assimilation
 Cx:Cy <=>  _ :Cy ;
 where Cx in ( Б Б' б б' В В' в в' Г Г' г г' Д Д' д д' Ж ж З З' з з' )
       Cy in ( П П' п п' Ф Ф' ф ф' К К' к к' Т Т' т т' Ш ш С С' с с' )
