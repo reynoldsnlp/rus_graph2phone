@@ -266,3 +266,7 @@ Cx:Cy <=> _ :Cy ;
 where Cx in ( Г  г  К  к  Х  х  )
       Cy in ( Г' г' К' к' Х' х' )
     matched ;
+
+!! ============================================================================
+!"Conversion of { ого его } in endings to { ово 'эво }"
+!TODO: Do we just list out several words that change this way?
