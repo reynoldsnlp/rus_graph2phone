@@ -132,7 +132,7 @@ HardV = А О У Ы Э
 
 Definitions
 
-Beginning = [ а́:0 | о́:0 | а:0 | о:0 | я́:0 | ё:0 | е́:0 | я:0 | е:0 | ь:0 | й:0 ] ;
+! Beginning = [ а́:0 | о́:0 | а:0 | о:0 | я́:0 | ё:0 | е́:0 | я:0 | е:0 | ь:0 | й:0 ] ;
 
 Rules
 
@@ -172,52 +172,52 @@ where Vx in ( о а )
   matched ;
 
 !! ============================================================================
-!"Ikanje: Unstressed vowel reduction for { я е } in pre-tonic location"
-!Vx:Vy <=> _ [ [ C ]+ | C* :й ]? StressedV ;
-!where Vx in ( Я я Е е )
-!      Vy in ( И и И и )
-! matched ;
-!
+"Ikanje: Unstressed vowel reduction for { я е } in pre-tonic location"
+Vx:Vy <=> \HardC: _ [:C | ь:]* StressedV: ;
+where Vx in ( Я я Е е )
+      Vy in ( И и И и )
+ matched ;
+
 !! ============================================================================
 !TODO: In endings like ят it could be a noun and thus wouldn't have the same pronunciation as the verb form
 ! алкоголя́т (although this is stressed, are there any other examples?)
+! TODO: identify where this is misfiring (e.g. wrong pos)
 !"Ikanje: Unstressed vowel reduction for { я } in word-ending"
-!Vx:Vy <=> _ [ .#. | т | тся | сь | х | м | ми ] ;
+!Vx:Vy <=> _ [ т: | т: с: я: | с: ь: | х: | м: | м: и: ]? .#. ;
 !
 !where Vx in ( Я я )
 !      Vy in ( Ъ ъ )
 ! matched ;
 !
 !! ============================================================================
-!"Ykanje: unstressed vowel reduction for { е } after { ж ш ц } in pre-tonic location"
-!Vx:Vy <=> HardC _ [ [ C ]+ | C* :й ]? StressedV ;
-!where Vx in ( Е е )
-!      Vy in ( Ы ы )
-!  matched ;
-!
+"Ykanje: unstressed vowel reduction for { е } after { ж ш ц } in pre-tonic location"
+Vx:Vy <=> HardC: _ [ C: | ь: ]* StressedV: ;
+where Vx in ( Е е )
+      Vy in ( Ы ы )
+  matched ;
+
 !! ============================================================================
-! TODO: how to do elsewhere
-!"Ykanje: unstressed е after { ж ш ц } in non-pre-tonic location"
-!Vx:Vy <=> HardC _ [ [ C ]+ | C* :й ]? [ UnstressedV+: [ C ]+ | UnstressedV+: C* :й ]? StressedV ;
-!          StressedV [ [ UnstressedV | C ]+ | [ UnstressedV | C ]* :й ]? HardC _ ;
-!where Vx in ( Е е )
-!      Vy in ( Ъ ъ )
-!  matched ;
-!
+"Ykanje: unstressed е after { ж ш ц } in non-pre-tonic location"
+Vx:Vy <=> HardC: _ [ [ C: | ь: ]* UnstressedV: [ C: | ь:]* ]+ StressedV: ;
+          StressedV: :* HardC: _ \StressedV:* ;
+where Vx in ( Е е )
+      Vy in ( Ъ ъ )
+  matched ;
+
 !! ============================================================================
-!"Tense e"
-!Vx:Vy <=> _ :PCandSoftS ;
-!where Vx in ( E e )
-!      Vy in ( Ê ê )
-!  matched ;
-!
+"Tense e"
+Vx:Vy <=> _ :PCandSoftS ;
+where Vx in ( É é )
+      Vy in ( Ê ê )
+  matched ;
+
 !! ============================================================================
-!"Tense я"
-!Vx:Vy <=> :PCandSoftS _ :PCandSoftS ;
-!where Vx in ( Я я А а )
-!      Vy in ( Я̂ я̂ А̂ а̂ )
-!  matched ;
-!
+"Tense я"
+Vx:Vy <=> :PCandSoftS _ :PCandSoftS ;
+where Vx in ( Я́ я́ А́ а́ )
+      Vy in ( Я̂ я̂ А̂ а̂ )
+  matched ;
+
 !! ============================================================================
 "Voice Assimilation: Final devoicing"
 Cx:Cy <=>  _ .#. ;
