@@ -1,16 +1,21 @@
-import hfst
 import csv
+from pathlib import Path
+
+import hfst
+
 
 def read_from_csv():
     datafile = open('test.csv', 'r')
     datareader = csv.reader(datafile, delimiter=',')
     data = []
     for row in datareader:
-        data.append((row[0],row[1]))
+        data.append((row[0], row[1]))
     return data
 
+
 def test_RPT(words):
-    hfst.compile_twolc_file('g2p.twolc', 'g2p.hfst')
+    if Path('g2p.twolc').stat().st_mtime > Path('g2p.hfst').stat().st_mtime:
+        hfst.compile_twolc_file('g2p.twolc', 'g2p.hfst')
     test = hfst.HfstInputStream('g2p.hfst')
     fsts = []
     fst = None
@@ -22,12 +27,11 @@ def test_RPT(words):
         fst.intersect(fstrans)
     for inword in words:  # for inword, outword in words:
         outwords = fst.lookup(inword)
-        print(inword, ', '.join([w.replace('@_EPSILON_SYMBOL_@', '') for w, wt
-                               in outwords]), sep='\t')
+        print(inword, ', '.join([w for w, wt in outwords]), sep='\t')
         # fst_word = fst.lookup(inword)
         # good_fst = (outword == fst_word)
         # if not good_fst:
-        #     print('Failed: {} :==> {} != {}'.format(word[0],word[1],fst_word))
+        #     print(f'Failed: {word[0]} :==> {word[1]} != {fst_word}')
 
 
 if __name__ == '__main__':
