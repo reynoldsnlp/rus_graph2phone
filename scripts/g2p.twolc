@@ -12,8 +12,8 @@ Alphabet
         Йэ Йо Йи         Йу Йа
         Йэ́ Йо́ Йи́         Йу́ Йа́
 ! TODO convert lowercase special characters to uppercase
-      б  в  г  д  ж з  й  к  л  м  н  п  р  с  т  ф  х  ц ч  ш щ
-      б' в' г' д'   з' й' к' л' м' н' п' р' с' т' ф' х'   ч'   щ'
+      б  в  г  д  ж з  й:й' к  л  м  н  п  р  с  т  ф  х  ц ч:ч' ш щ:щ'
+      б' в' г' д'   з' й'   к' л' м' н' п' р' с' т' ф' х'   ч'     щ'
       ъ:0 ь:0
       а:ъ   е:ь  ё:о́  и  о:ъ у ы э   ю:у  я:ь ʌ
       а́   â е́:э́  ё́    и́  о́   у́ ы́ э́ э̂ ю́:у́  я́:а́     ! ё́ is included to broaden coverage
@@ -74,20 +74,16 @@ HUSH = Ж Ш Щ Ч
        ж ш щ ч ;
 
 ! Labials for Softness Assimilation
-LAB = Б  б  В  в  М  м  П  п  Ф  ф
-      Б' б' В' в' М' м' П' п' Ф' ф' ;
+LabS = Б' б' В' в' М' м' П' п' Ф' ф' ;
 
 ! Dentals for Softness Assimilation
-DEN = Д  д  З  з  Л  л  Н  н  Р  р  С  с  Т  т  Ц ц
-      Д' д' З' з' Л' л' Н' н' Р' р' С' с' Т' т' Ц ц ;
+DenS = Д' д' З' з' Л' л' Н' н' Р' р' С' с' Т' т' Ц ц ;
 
 ! Palatals for Softness Assimilation
-PAL =  Й  й  Ч  ч
-       Й' й' Ч' ч' ;
+PalS = Й' й' Ч' ч' ;
 
 ! Velars for Softness Assimilation
-VEL = Г  г  К  к  Х  х
-      Г' г' К' к' Х' х' ;
+VelS = Г' г' К' к' Х' х' ;
 
 ! Paired consonants (consonants that have both a hard and soft variant, excluding Velars)
 PC = Б В Д З Л М Н П Р С Т Ф
@@ -169,6 +165,7 @@ where Vx in ( И́ И и́ и )
 
 !! ============================================================================
 "Akanje: Unstressed vowel reduction for { о а } in pre-tonic location and word-initially"
+!TODO: Doesn't work for крою́
 Vx:Vy <=> _ [[:C | ь:]*]? StressedV ;
           .#. _ ;
 where Vx in ( о а )
@@ -182,6 +179,25 @@ where Vx in ( Я я Е е )
       Vy in ( И и И и )
  matched ;
 
+!!! ============================================================================
+!"Ikanje: Vowel reduction for { я е ё } in at beginning and after vowel"
+! TODO: this won't work because the vowels are manipulated later
+! It needs to take 0 -> Й or й
+!Vx:Vy <=> [ V: | Ъ: | Ъ: | .#. ] _ ;
+!where Vx in ( Я  Я́  я  я́  Е  Е́  е  е́  Ё  ё  )
+!      Vy in ( Йа Йа́ йа йа́ Йэ Йэ́ йэ йэ́ Йо́ йо́ )
+!matched ;
+!
+!
+!!! ============================================================================
+!"Vowel reduction for { и } in at beginning and after { ъ ь }"
+! TODO: this won't work because the vowels are manipulated later
+! It needs to take 0 -> Й or й
+!Vx:Vy <=> [ Ъ: | Ъ: | .#. ] _ ;
+!where Vx in ( И  и  )
+!      Vy in ( Йи йи )
+!matched ;
+!
 !! ============================================================================
 !TODO: In endings like ят it could be a noun and thus wouldn't have the same pronunciation as the verb form
 ! алкоголя́т (although this is stressed, are there any other examples?)
@@ -195,7 +211,7 @@ where Vx in ( Я я Е е )
 !
 !! ============================================================================
 "Ykanje: unstressed vowel reduction for { е } after { ж ш ц } in pre-tonic location"
-Vx:Vy <=> .#. [:* - StressedV: ] HardC: _ [ C: | ь: ]* StressedV: ;
+Vx:Vy <=> .#. [: - StressedV: ]* HardC: _ [ C: | ь: ]* StressedV: ;
 where Vx in ( Е е )
       Vy in ( Ы ы )
   matched ;
@@ -219,7 +235,7 @@ where Vx in ( É é )
 "Tense я"
 Vx:Vy <=> :PCandSoftS _ :PCandSoftS ;
 where Vx in ( Я́ я́ А́ а́ )
-      Vy in ( Я̂ я̂ А̂ а̂ )
+      Vy in ( А̂ а̂ А̂ а̂ )
   matched ;
 
 !! ============================================================================
@@ -246,28 +262,21 @@ where Cx in ( П П' п п' Ф Ф' ф ф' К К' к к' Т Т' т т' Ш ш С �
 
 !! ============================================================================
 "Softness Assimilation: Dentals"
-Cx:Cy <=> _ :DEN ;
-where Cx in ( Д  д  З  з  Л  л  Н  н  Р  р  С  с  Т  т  Ц ц )
-      Cy in ( Д' д' З' з' Л' л' Н' н' Р' р' С' с' Т' т' Ц ц )
+Cx:Cy <=> _ :DenS ;
+where Cx in ( Д  д  З  з  Л  л  Н  н  Р  р  С  с  Т  т  )
+      Cy in ( Д' д' З' з' Л' л' Н' н' Р' р' С' с' Т' т' )
     matched ;
 
 !! ============================================================================
 "Softness Assimilation: Labials"
-Cx:Cy <=> _ :LAB;
+Cx:Cy <=> _ :LabS ;
 where Cx in ( Б  б  В  в  М  м  П  п  Ф  ф  )
       Cy in ( Б' б' В' в' М' м' П' п' Ф' ф' )
     matched ;
 
 !! ============================================================================
-"Softness Assimilation: Palatal"
-Cx:Cy <=> _ :PAL ;
-where Cx in ( Й  й  Ч  ч  )
-      Cy in ( Й' й' Ч' ч' )
-    matched ;
-
-!! ============================================================================
 "Softness Assimilation: Velar"
-Cx:Cy <=> _ :VEL ;
+Cx:Cy <=> _ :VelS ;
 where Cx in ( Г  г  К  к  Х  х  )
       Cy in ( Г' г' К' к' Х' х' )
     matched ;
@@ -275,3 +284,7 @@ where Cx in ( Г  г  К  к  Х  х  )
 !! ============================================================================
 !"Conversion of { ого его } in endings to { ово 'эво }"
 !TODO: Do we just list out several words that change this way?
+
+!! ============================================================================
+!"Conversion of { тс } in endings { ятся } to { ц }"
+!TODO:
