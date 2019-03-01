@@ -200,7 +200,6 @@ where Vx in ( Е е )
       Vy in ( Ы ы )
   matched ;
 
-Ёжё
 !! ============================================================================
 "Ykanje: unstressed е after { ж ш ц } in non-pre-tonic location"
 Vx:Vy <=> HardC: _ [ [ C: | ь: ]* UnstressedV: [ C: | ь:]* ]+ StressedV: ;
