@@ -14,9 +14,11 @@ def read_from_csv():
 
 
 def test_RPT(words):
-    if Path('g2p.twolc').stat().st_mtime > Path('g2p.hfst').stat().st_mtime:
-        hfst.compile_twolc_file('g2p.twolc', 'g2p.hfst')
-    test = hfst.HfstInputStream('g2p.hfst')
+    src = Path('g2p.twolc')
+    raw = Path('rawg2p.hfst')
+    if not raw.exists() or (src.stat().st_mtime > raw.stat().st_mtime):
+        hfst.compile_twolc_file('g2p.twolc', 'rawg2p.hfst')
+    test = hfst.HfstInputStream('rawg2p.hfst')
     fsts = []
     fst = None
     if not test.is_eof():
@@ -25,6 +27,10 @@ def test_RPT(words):
         fsts.append(test.read())
     for fstrans in fsts:
         fst.intersect(fstrans)
+    out = hfst.HfstOutputStream(filename='g2p.hfst')
+    out.write(fst)
+    out.flush()
+    out.close()
     for inword in words:  # for inword, outword in words:
         outwords = fst.lookup(inword)
         print(inword, ', '.join([w for w, wt in outwords]), sep='\t')
