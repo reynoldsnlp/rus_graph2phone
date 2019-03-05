@@ -6,11 +6,11 @@ Alphabet
       Б  В  Г  Д  Ж З  Й:Й' К  Л  М  Н  П  Р  С  Т  Ф  Х  Ц Ч:Ч' Ш Щ:Щ'
       Б' В' Г' Д'   З' Й'   К' Л' М' Н' П' Р' С' Т' Ф' Х'   Ч'     Щ'
       Ъ:0 Ь:0
-      А Е  Ё  И  О У Ы Э Ю  Я
-      А́ Е́  Ё́  И́  О́ У́ Ы́ Э́ Ю́  Я́
-      А̀ Ѐ  Ё̀  Ѝ  О̀ У̀ Ы̀ Э̀ Ю̀  Я̀
-        Йэ Йо Йи         Йу Йа
-        Йэ́ Йо́ Йи́         Йу́ Йа́
+      А Е:Ь Ё:О́ И  О У Ы Э Ю  Я
+      А́ Е́:Э́ Ё́   И́  О́ У́ Ы́ Э́ Ю́  Я́
+      А̀ Ѐ   Ё̀   Ѝ  О̀ У̀ Ы̀ Э̀ Ю̀  Я̀
+        Йэ  Йо  Йи         Йу Йа
+        Йэ́  Йо́  Йи́         Йу́ Йа́
 ! TODO convert lowercase special characters to uppercase
       б  в  г  д  ж з  й:й' к  л  м  н  п  р  с  т  ф  х  ц ч:ч' ш щ:щ'
       б' в' г' д'   з' й'   к' л' м' н' п' р' с' т' ф' х'   ч'     щ'
@@ -174,10 +174,32 @@ where Vx in ( о а )
 
 !! ============================================================================
 "Ikanje: Unstressed vowel reduction for { я е } in pre-tonic location"
-Vx:Vy <=> \HardC: _ [:C | ь:]* StressedV: ;
+Vx:Vy <=> [: - [ HardC: | V: ]] _ [:C | ь:]* StressedV: ;
 where Vx in ( Я я Е е )
       Vy in ( И и И и )
  matched ;
+
+!! ============================================================================
+"Ikanje: Unstressed vowel reduction for { я е } in non-pre-tonic location and word-initially"
+Vx:Vy <=> [: - HardC: ] _ [ [ C: | ь: ]* UnstressedV: [ C: | ь:]* ]+ StressedV: ;
+          .#. _ [ [ C: | ь: ]* UnstressedV: [ C: | ь:]* ]+ StressedV: ;
+where Vx in ( Я я Е е )
+     Vy in ( Йь йь Йь йь )
+matched ;
+
+!! ============================================================================
+"Ikanje: Unstressed vowel reduction for { я е } in pre-tonic location"
+Vx:Vy <=> [ V: | .#. ] _ [:C | ь:]* StressedV: ;
+where Vx in ( Я я Е е )
+     Vy in ( Йи йи Йи йи )
+matched ;
+
+!! ============================================================================
+"Stressed vowel reduction for { я е }"
+Vx:Vy <=> [ V: | .#. ] _ ;
+where Vx in ( Я́ я́ Е́ е́ )
+     Vy in ( Йа́ йа́ Йэ́ йэ́ )
+matched ;
 
 !!! ============================================================================
 !"Ikanje: Vowel reduction for { я е ё } in at beginning and after vowel"
