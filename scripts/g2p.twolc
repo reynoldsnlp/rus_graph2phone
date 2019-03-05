@@ -202,16 +202,6 @@ where Vx in ( Я́ я́ Е́ е́ Ё ё Ё́ ё́ )
 matched ;
 
 !!! ============================================================================
-!"Ikanje: Vowel reduction for { я е ё } in at beginning and after vowel"
-! TODO: this won't work because the vowels are manipulated later
-! It needs to take 0 -> Й or й
-!Vx:Vy <=> [ V: | Ъ: | Ъ: | .#. ] _ [ [:C | ь:]* StressedV: ] ] ;
-!where Vx in ( Я  Я́  я  я́  Е  Е́  е  е́  Ё  ё  )
-!      Vy in ( Йа Йа́ йа йа́ Йэ Йэ́ йэ йэ́ Йо́ йо́ )
-!matched ;
-!
-!
-!!! ============================================================================
 !"Vowel reduction for { и } in at beginning and after { ъ ь }"
 ! TODO: this won't work because the vowels are manipulated later
 ! It needs to take 0 -> Й or й
