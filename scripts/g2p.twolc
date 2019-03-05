@@ -240,7 +240,7 @@ where Vx in ( Е е )
 "Tense e"
 Vx:Vy <=> _ :PCandSoftS ;
 where Vx in ( É é )
-      Vy in ( Ê ê )
+      Vy in ( Э̂ э̂ )
   matched ;
 
 !! ============================================================================
