@@ -3,23 +3,23 @@ Alphabet
       %  ! space
       %-
 
-      Б  В  Г  Д  Ж З  Й:Й' К  Л  М  Н  П  Р  С  Т  Ф  Х  Ц Ч:Ч' Ш Щ:Щ'
-      Б' В' Г' Д'   З' Й'   К' Л' М' Н' П' Р' С' Т' Ф' Х'   Ч'     Щ'
-      Ъ:0 Ь:0
-      А Е:Ь Ё:О́ И  О У Ы Э Ю  Я
-      А́ Е́:Э́ Ё́   И́  О́ У́ Ы́ Э́ Ю́  Я́
-      А̀ Ѐ   Ё̀   Ѝ  О̀ У̀ Ы̀ Э̀ Ю̀  Я̀
-        Йэ  Йо  Йи         Йу Йа
-        Йэ́  Йо́  Йи́         Йу́ Йа́
+      Б  В  Г  Д  Ж З  Й  К  Л  М  Н  П  Р  С  Т  Ф  Х  Ц Ч:  Ш Щ:
+      Б' В' Г' Д'   З' Й' К' Л' М' Н' П' Р' С' Т' Ф' Х'   Ч'   Щ'
+      Ъ: Ь:
+      А Е  Ё:  И  О У Ы Э Ю:  Я
+      А́ Е́  Ё́  И́  О́ У́ Ы́ Э́ Ю́:  Я́
+      А̀ Ѐ  Ё̀  Ѝ  О̀ У̀ Ы̀ Э̀ Ю̀  Я̀
+        Йэ Йо Йи         Йу Йа
+        Йэ́ Йо́ Йи́         Йу́ Йа́
 ! TODO convert lowercase special characters to uppercase
-      б  в  г  д  ж з  й:й' к  л  м  н  п  р  с  т  ф  х  ц ч:ч' ш щ:щ'
-      б' в' г' д'   з' й'   к' л' м' н' п' р' с' т' ф' х'   ч'     щ'
-      ъ:0 ь:0
-      а:ъ   е:ь  ё:о́  и  о:ъ у ы э   ю:у  я:ь ʌ
-      а́   â е́:э́  ё́    и́  о́   у́ ы́ э́ э̂ ю́:у́  я́:а́     ! ё́ is included to broaden coverage
-      а̀     ѐ    ё̀    ѝ  о̀   у̀ ы̀ э̀   ю̀    я̀
-            йэ:ь йо   йи             йу   йа:ь
-            йэ́   йо́   йи́             йу́   йа́ ;
+      б  в  г  д  ж з  й  к  л  м  н  п  р  с  т  ф  х  ц ч:  ш щ:
+      б' в' г' д'   з' й' к' л' м' н' п' р' с' т' ф' х'   ч'   щ'
+      ъ: ь:
+      а   е  ё:  и  о у ы э   ю:  я ʌ
+      а́ â е́  ё́  и́  о́ у́ ы́ э́ э̂ ю́:  я́     ! ё́ is included to broaden coverage
+      а̀   ѐ  ё̀  ѝ  о̀ у̀ ы̀ э̀   ю̀  я̀
+          йэ йо йи           йу йа
+          йэ́ йо́ йи́           йу́ йа́ ;
 
 Sets
 
@@ -48,6 +48,12 @@ CNoHard = Б В Г Д З Й К Л М Н П Р С Т Ф Х Ч Щ
 ! Consonants, excluding { Ж ж Й й Ч ч Ш ш Щ щ Ц ц }
 CNoSoftHard = Б В Г Д З К Л М Н П Р С Т Ф Х
               б в г д з к л м н п р с т ф х ;
+
+! Voiced consonants, with hard and soft
+VoicedCSH = Б Б' б б' В В' в в' Г Г' г г' Д Д' д д' Ж ж З З' з з' ;
+
+! Unvoiced consonants, with hard and soft
+UnvoicedCSH =  П П' п п' Ф Ф' ф ф' К К' к к' Т Т' т т' Ш ш С С' с с' ;
 
 ! Unvoiced consonants
 UnvoicedC = К П С Т Ф Х Ц Ч Ш Щ
@@ -149,12 +155,40 @@ where Cx in ( Б  В  Г  Д  З  К  Л  М  Н  П  Р  С  Т  Ф  Х
     matched ;
 
 !! ============================================================================
+"Indicate softness in soft consonants"
+Vx:Vy <=> _ ;
+where Vx in ( Ч  ч  Щ  щ  ) !Й й
+      Vy in ( Ч' ч' Щ' щ' ) !Й й
+  matched ;
+
+!! ============================================================================
+"Remove hard and soft signs"
+Vx:0 <=> _ ;
+where Vx in ( Ъ ъ Ь ь ) ;
+
+!! ============================================================================
+"Vowel realization for ю>у"
+Vx:Vy <=> [: - [ V: | Ь: | ь: | Ъ: | ъ: | .#. ]] _ ;
+
+where Vx in ( Ю́ Ю ю́ ю )
+      Vy in ( У́ У у́ у )
+  matched ;
+
+!! ============================================================================
+"Vowel realization for { и } after { ъ ь }"
+Vx:Vy <=> [ Ь: | ь: | Ъ: | ъ: ] _ ;
+
+where Vx in ( И́  И  и́  и  )
+      Vy in ( Йи́ Йи йи́ йи )
+  matched ;
+
+!! ============================================================================
 "ю>йу between vowels, word-initially, and after hard-/soft-signs"
-Vx:Vy <=> [ V: | Ъ: | Ъ: | .#. ] _ ;
+Vx:Vy <=>  [ V: | Ь: | ь: | Ъ: | ъ: | .#. ] _ ;
 
 where Vx in ( Ю́  Ю  ю́  ю )
       Vy in ( Йу́ Йу йу́ йу )
-    matched ;
+  matched ;
 
 !! ============================================================================
 "Yeri rule: after hard consonants и is pronounced as ы"
@@ -165,12 +199,33 @@ where Vx in ( И́ И и́ и )
 
 !! ============================================================================
 "Akanje: Unstressed vowel reduction for { о а } in pre-tonic location and word-initially"
-!TODO: Doesn't work for крою́
-Vx:Vy <=> _ [:C | ь:]* StressedV: ;
+Vx:Vy <=> [: - StressedV:] _ [:C | ь:]* StressedV: ;
           .#. _ ;
-where Vx in ( о а )
-      Vy in ( ʌ ʌ )
+where Vx in ( О о А а )
+      Vy in ( ʌ ʌ ʌ ʌ )
   matched ;
+
+!! ============================================================================
+"Akanje: Unstressed vowel reduction for { о а } in non-pre-tonic and post-tonic location"
+Vx:Vy <=> [: - .#.] _ [ [ C: | ь: ]* UnstressedV: [ C: | ь:]* ]+ StressedV: ;
+          StressedV: [: - HardC:]* _ [: - StressedV:]* .#. ;
+where Vx in ( О о А а )
+      Vy in ( Ъ ъ Ъ ъ )
+  matched ;
+
+!! ============================================================================
+"Stressed vowel realization for { ё }"
+Vx:Vy <=> [: - [ V: | Ь: | ь: | Ъ: | ъ: | .#. ]] _ ;
+where Vx in ( Ё ё )
+      Vy in ( О́ о́ )
+ matched ;
+
+!! ============================================================================
+"Ikanje: Stressed vowel realization for { я е }"
+Vx:Vy <=> [: - [ V: | Ь: | ь: | Ъ: | ъ: | .#. ]] _ [[: - :PCandSoftS] | .#.] ;
+where Vx in ( Я́ я́ Е́ е́ )
+      Vy in ( А́ а́ Э́ э́ )
+ matched ;
 
 !! ============================================================================
 "Ikanje: Unstressed vowel reduction for { я е } in pre-tonic location"
@@ -181,31 +236,39 @@ where Vx in ( Я я Е е )
 
 !! ============================================================================
 "Ikanje: Unstressed vowel reduction for { я е } in non-pre-tonic location, word-initially and post-tonic"
-Vx:Vy <=> [ V: | .#. ] _ [ [ C: | ь: ]* UnstressedV: [ C: | ь:]* ]+ StressedV: ;
-!          StressedV: :* [ V: | ь: | ъ: ] _ [:* - StressedV:] ;
+Vx:Vy <=> [: - [ V: | .#. | HardC:]] _ [ [ C: | ь: ]* UnstressedV: [ C: | ь:]* ]+ StressedV: ;
+         StressedV: [: - [ V: | .#. | HardC:]]* _ [: - StressedV:]* .#. ;
 where Vx in ( Я я Е е )
-     Vy in ( Йь йь Йь йь )
+      Vy in ( Ь ь Ь ь )
 matched ;
 
 !! ============================================================================
-"Ikanje: Unstressed vowel reduction for { я е } in pre-tonic location"
+"Ikanje: Unstressed vowel reduction with Й for { я е } in non-pre-tonic location, word-initially and post-tonic"
+Vx:Vy <=> [ V: | .#. ] _ [ [ C: | ь: ]* UnstressedV: [ C: | ь:]* ]+ StressedV: ;
+          StressedV: :* UnstressedV: _ [: - StressedV:]* .#. ;
+where Vx in ( Я я Е е )
+      Vy in ( Йь йь Йь йь )
+matched ;
+
+!! ============================================================================
+"Ikanje: Unstressed vowel reduction with Й for { я е } in pre-tonic location"
 Vx:Vy <=> [ V: | .#. ] _ [:C | ь:]* StressedV: ;
 where Vx in ( Я я Е е )
      Vy in ( Йи йи Йи йи )
 matched ;
 
 !! ============================================================================
-"Stressed vowel realization of Й for { я е }"
-Vx:Vy <=> [ V: | Ъ: | Ъ: | .#. ] _ ;
+"Stressed vowel realization with Й for { я е ё }"
+Vx:Vy <=> [ V: | Ь: | ь: | Ъ: | ъ: | .#. ] _ ;
 where Vx in ( Я́ я́ Е́ е́ Ё ё Ё́ ё́ )
-     Vy in ( Йа́ йа́ Йэ́ йэ́ Йо́ йо́ Йо́ йо́ )
+      Vy in ( Йа́ йа́ Йэ́ йэ́ Йо́ йо́ Йо́ йо́ )
 matched ;
 
 !!! ============================================================================
 !"Vowel reduction for { и } in at beginning and after { ъ ь }"
 ! TODO: this won't work because the vowels are manipulated later
 ! It needs to take 0 -> Й or й
-!Vx:Vy <=> [ Ъ: | Ъ: | .#. ] _ ;
+!Vx:Vy <=> [ Ь: | ь: | Ъ: | ъ: | .#.  ] _ ;
 !where Vx in ( И  и  )
 !      Vy in ( Йи йи )
 !matched ;
@@ -239,6 +302,7 @@ where Vx in ( Е е )
 !! ============================================================================
 "Tense e"
 Vx:Vy <=> _ :PCandSoftS ;
+! TODO: Doesn't work for присе́сть
 where Vx in ( É é )
       Vy in ( Э̂ э̂ )
   matched ;
@@ -258,21 +322,21 @@ where Cx in ( Б Б' б б' В В' в в' Г Г' г г' Д Д' д д' Ж ж З �
   matched ;
 
 !! ============================================================================
-"Voice Assimilation: Consonant clusters with unvoiced consonant at end of the cluster"
-!TODO: В doesn't force softness assimilation
-Cx:Cy <=>  _ :Cy ;
-where Cx in ( Б Б' б б' В В' в в' Г Г' г г' Д Д' д д' Ж ж З З' з з' )
-      Cy in ( П П' п п' Ф Ф' ф ф' К К' к к' Т Т' т т' Ш ш С С' с с' )
-  matched ;
-
+!"Voice Assimilation: Consonant clusters with unvoiced consonant at end of the cluster"
+!TODO: В doesn't force softness assimilation, conflicts with softness assimilations
+!Cx:Cy <=>  _ :UnvoicedCSH ;
+!where Cx in ( Б Б' б б' В В' в в' Г Г' г г' Д Д' д д' Ж ж З З' з з' )
+!      Cy in ( П П' п п' Ф Ф' ф ф' К К' к к' Т Т' т т' Ш ш С С' с с' )
+!  matched ;
+!
 !! ============================================================================
-"Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
-Cx:Cy <=>  _ :Cy ;
-!TODO: This is not working!!! вокза́л
-where Cx in ( П П' п п' Ф Ф' ф ф' К К' к к' Т Т' т т' Ш ш С С' с с' )
-      Cy in ( Б Б' б б' В В' в в' Г Г' г г' Д Д' д д' Ж ж З З' з з' )
-  matched ;
-
+!"Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
+!Cx:Cy <=>  _ :VoicedCSH ;
+!TODO: conflicts with softness assimilations
+!where Cx in ( П П' п п' Ф Ф' ф ф' К К' к к' Т Т' т т' Ш ш С С' с с' )
+!      Cy in ( Б Б' б б' В В' в в' Г Г' г г' Д Д' д д' Ж ж З З' з з' )
+!  matched ;
+!
 !! ============================================================================
 "Softness Assimilation: Dentals"
 Cx:Cy <=> _ :DenS ;
