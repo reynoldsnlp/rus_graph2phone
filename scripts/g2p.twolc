@@ -49,12 +49,6 @@ CNoHard = Б В Г Д З Й К Л М Н П Р С Т Ф Х Ч Щ
 CNoSoftHard = Б В Г Д З К Л М Н П Р С Т Ф Х
               б в г д з к л м н п р с т ф х ;
 
-! Voiced consonants, with hard and soft
-VoicedCSH = Б Б' б б' В В' в в' Г Г' г г' Д Д' д д' Ж ж З З' з з' ;
-
-! Unvoiced consonants, with hard and soft
-UnvoicedCSH =  П П' п п' Ф Ф' ф ф' К К' к к' Т Т' т т' Ш ш С С' с с' ;
-
 ! Unvoiced consonants
 UnvoicedC = К П С Т Ф Х Ц Ч Ш Щ
             к п с т ф х ц ч ш щ ;
@@ -156,9 +150,10 @@ where Cx in ( Б  В  Г  Д  З  К  Л  М  Н  П  Р  С  Т  Ф  Х
 
 !! ============================================================================
 "Indicate softness in soft consonants"
+!Й й
 Vx:Vy <=> _ ;
-where Vx in ( Ч  ч  Щ  щ  ) !Й й
-      Vy in ( Ч' ч' Щ' щ' ) !Й й
+where Vx in ( Ч  ч  Щ  щ  )
+      Vy in ( Ч' ч' Щ' щ' )
   matched ;
 
 !! ============================================================================
@@ -246,7 +241,7 @@ matched ;
 "Ikanje: Unstressed vowel reduction with Й for { я е } in non-pre-tonic location, word-initially and post-tonic"
 Vx:Vy <=> [ V: | .#. ] _ [ [ C: | ь: ]* UnstressedV: [ C: | ь:]* ]+ StressedV: ;
           StressedV: :* UnstressedV: _ [: - StressedV:]* .#. ;
-where Vx in ( Я я Е е )
+where Vx in ( Я  я  Е  е  )
       Vy in ( Йь йь Йь йь )
 matched ;
 
@@ -260,7 +255,7 @@ matched ;
 !! ============================================================================
 "Stressed vowel realization with Й for { я е ё }"
 Vx:Vy <=> [ V: | Ь: | ь: | Ъ: | ъ: | .#. ] _ ;
-where Vx in ( Я́ я́ Е́ е́ Ё ё Ё́ ё́ )
+where Vx in ( Я́  я́  Е́  е́  Ё  ё  Ё́  ё́ )
       Vy in ( Йа́ йа́ Йэ́ йэ́ Йо́ йо́ Йо́ йо́ )
 matched ;
 
@@ -324,14 +319,14 @@ where Cx in ( Б Б' б б' В В' в в' Г Г' г г' Д Д' д д' Ж ж З �
 !! ============================================================================
 !"Voice Assimilation: Consonant clusters with unvoiced consonant at end of the cluster"
 !TODO: В doesn't force softness assimilation, conflicts with softness assimilations
-!Cx:Cy <=>  _ :UnvoicedCSH ;
+!Cx:Cy <=>  _ :UnvoicedPairedC ;
 !where Cx in ( Б Б' б б' В В' в в' Г Г' г г' Д Д' д д' Ж ж З З' з з' )
 !      Cy in ( П П' п п' Ф Ф' ф ф' К К' к к' Т Т' т т' Ш ш С С' с с' )
 !  matched ;
 !
 !! ============================================================================
 !"Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
-!Cx:Cy <=>  _ :VoicedCSH ;
+!Cx:Cy <=>  _ :VoicedPairedC ;
 !TODO: conflicts with softness assimilations
 !where Cx in ( П П' п п' Ф Ф' ф ф' К К' к к' Т Т' т т' Ш ш С С' с с' )
 !      Cy in ( Б Б' б б' В В' в в' Г Г' г г' Д Д' д д' Ж ж З З' з з' )
