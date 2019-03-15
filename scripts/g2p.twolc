@@ -138,7 +138,7 @@ where Vx in ( О о А а )
 !! TODO: Tense е́ doesn't work
 "Tense я́ and е́"
 Vx:Vy <=> [ :CNoSoftHard :' | :SoftC ] _ [ :CNoSoftHard :' | :SoftC ] ;
-where Vx in ( Я́ я́ А́ а́ É é )
+where Vx in ( Я́ я́ А́ а́ Е́ е́ )
       Vy in ( А̂ а̂ А̂ а̂ Э̂ э̂ )
  matched ;
 
