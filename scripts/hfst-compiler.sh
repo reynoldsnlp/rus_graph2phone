@@ -8,22 +8,14 @@ fi
 # if source is newer than compiled, recompile
 if [[ g2p.twolc -nt g2p.hfst ]]; then
 	echo "compiling hfst file..."
-	hfst-twolc -i g2p.twolc -o g2p.hfst
-fi
-
-if [[ g2p.hfst -nt g2pall.hfst ]]; then
-	echo "splitting and intersecting twolc rules..."
-	hfst-split g2p.hfst --prefix g2prule --extension .hfst
-	echo "?* ;" | hfst-regexp2fst -o g2pall.hfst
-	for fst in g2prule*.hfst ; do
-	    hfst-intersect $fst g2pall.hfst -o temp.hfst
-	    cp temp.hfst g2pall.hfst
-	done
-	rm g2prule*.hfst
-	rm temp.hfst
+	hfst-twolc -i g2p.twolc -o g2p.tmp.hfst
+	echo "creating base FST with universal language..."
+	echo "?* ;" | hfst-regexp2fst -o univ.hfst
+	echo "compose-intersecting twolc rules with universal FST..."
+	hfst-compose-intersect univ.hfst g2p.tmp.hfst > g2p.hfst
 fi
 
 echo "running test entries..."
-cat /tmp/g2p_lex-test.txt | hfst-lookup g2pall.hfst 2>/dev/null >/tmp/output_g2p_hfst.txt
+cat /tmp/g2p_lex-test.txt | hfst-lookup g2p.hfst 2>/dev/null >/tmp/output_g2p_hfst.txt
 
 echo -e "To see output from test.csv, 'less /tmp/output_g2p_hfst.txt'\n"

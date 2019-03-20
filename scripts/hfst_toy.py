@@ -16,28 +16,38 @@ def read_from_csv():
 
 def test_RPT(words):
     src = Path('g2p.twolc')
-    raw = Path('rawg2p_from_py.hfst')
+    tmp = Path('g2p_from_py.tmp.hfst')
     final = Path('g2p_from_py.hfst')
-    if not raw.exists() or (src.stat().st_mtime > raw.stat().st_mtime):
-        hfst.compile_twolc_file(src.name, raw.name)
-    test = hfst.HfstInputStream(raw.name)
-    fsts = []
-    fst = None
-    if not test.is_eof():
-        fst = test.read()
-    while not test.is_eof():
-        fsts.append(test.read())
-    for fstrans in fsts:
-        fst.intersect(fstrans)
-    # fst.invert()  # This gives `Segmentation fault: 11`
+    if not tmp.exists() or (src.stat().st_mtime > tmp.stat().st_mtime):
+        print('Compiling twolc rules...', file=sys.stderr)
+        hfst.compile_twolc_file(src.name, tmp.name)
+
+    print('Preparing rule transducers for composition...', file=sys.stderr)
+    rule_fsts_stream = hfst.HfstInputStream(tmp.name)
+    rule_fsts = []
+    while not rule_fsts_stream.is_eof():
+        next_fst = rule_fsts_stream.read()
+        next_fst.determinize()
+        next_fst.remove_epsilons()
+        print(type(next_fst), next_fst.get_name())
+        rule_fsts.append(next_fst)
+    rule_fsts = tuple(rule_fsts)
+
+    print('Creating universal language FST...', file=sys.stderr)
+    universal = hfst.regex('?* ;')
+    print('Compose-intersecting rules with universal FST...', file=sys.stderr)
+    universal.compose_intersect(rule_fsts)
+
+    print('Writing out final FST...', file=sys.stderr)
     out = hfst.HfstOutputStream(filename=final.name)
-    out.write(fst)
+    out.write(universal)
     out.flush()
     out.close()
+
     output = []
     print('Processing test words...', file=sys.stderr)
     for inword in words:  # for inword, outword in words:
-        outwords = fst.lookup(inword)
+        outwords = universal.lookup(inword)
         output.append(f'{inword}\n{", ".join([w for w, wt in outwords])}\n\n')
         # fst_word = fst.lookup(inword)
         # good_fst = (outword == fst_word)
