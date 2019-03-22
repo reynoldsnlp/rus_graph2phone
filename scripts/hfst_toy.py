@@ -24,19 +24,13 @@ def test_RPT(words):
 
     print('Preparing rule transducers for composition...', file=sys.stderr)
     rule_fsts_stream = hfst.HfstInputStream(tmp.name)
-    rule_fsts = []
-    while not rule_fsts_stream.is_eof():
-        next_fst = rule_fsts_stream.read()
-        next_fst.determinize()
-        next_fst.remove_epsilons()
-        print(type(next_fst), next_fst.get_name())
-        rule_fsts.append(next_fst)
-    rule_fsts = tuple(rule_fsts)
+    rule_fsts = [t for t in rule_fsts_stream]
 
     print('Creating universal language FST...', file=sys.stderr)
     universal = hfst.regex('?* ;')
     print('Compose-intersecting rules with universal FST...', file=sys.stderr)
     universal.compose_intersect(rule_fsts)
+    print(universal.lookup('включа́ть'))
 
     print('Writing out final FST...', file=sys.stderr)
     out = hfst.HfstOutputStream(filename=final.name)
@@ -47,6 +41,7 @@ def test_RPT(words):
     output = []
     print('Processing test words...', file=sys.stderr)
     for inword in words:  # for inword, outword in words:
+        print('.', end='', flush=True)
         outwords = universal.lookup(inword)
         output.append(f'{inword}\n{", ".join([w for w, wt in outwords])}\n\n')
         # fst_word = fst.lookup(inword)
@@ -65,4 +60,4 @@ if __name__ == '__main__':
     out_file = Path('/tmp/output_g2p_hfst_from_py.txt')
     with out_file.open('w') as f:
         print(''.join(test_RPT(test_words)), file=f)
-    print(f'Output can be viewed using `less {out_file}`')
+    print(f'Output can be viewed using...\nless {out_file}')
