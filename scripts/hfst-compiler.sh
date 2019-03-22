@@ -13,9 +13,12 @@ if [[ g2p.twolc -nt g2p.hfst ]]; then
 	echo "?* ;" | hfst-regexp2fst -o univ.hfst
 	echo "compose-intersecting twolc rules with universal FST..."
 	hfst-compose-intersect univ.hfst g2p.tmp.hfst > g2p.hfst
+	echo "converting to optimized lookup format..."
+	hfst-fst2fst -O -i g2p.hfst -o g2p.hfstol
 fi
 
 echo "running test entries..."
-cat /tmp/g2p_lex-test.txt | hfst-lookup g2p.hfst 2>/dev/null >/tmp/output_g2p_hfst.txt
+cat /tmp/g2p_lex-test.txt | hfst-lookup g2p.hfstol 2>/dev/null >/tmp/output_g2p_hfst.txt
 
-echo -e "To see output from test.csv, 'less /tmp/output_g2p_hfst.txt'\n"
+echo "To see output from test.csv, use..."
+echo "less /tmp/output_g2p_hfst.txt"
