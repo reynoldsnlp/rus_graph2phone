@@ -20,7 +20,7 @@ def test_RPT(words):
     final = Path('g2p_from_py.hfst')
     if not tmp.exists() or (src.stat().st_mtime > tmp.stat().st_mtime):
         print('Compiling twolc rules...', file=sys.stderr)
-        hfst.compile_twolc_file(src.name, tmp.name)
+        hfst.compile_twolc_file(src.name, tmp.name, resolve_left_conflicts=True)
 
     print('Preparing rule transducers for composition...', file=sys.stderr)
     rule_fsts_stream = hfst.HfstInputStream(tmp.name)
