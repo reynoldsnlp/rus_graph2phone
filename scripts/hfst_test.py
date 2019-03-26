@@ -20,14 +20,22 @@ def get_fst(start_rule, end_rule, *args):
 
     rule_numbers = set()
     rule_numbers.add(0)
-    rule_numbers.add(range(start_rule, end_rule + 1))
+    for i in range(start_rule, end_rule + 1):
+        rule_numbers.add(i)
     if (len(args) > 0):
-        rule_numbers.add(range(args[0], args[1]+1))
+        for i in range(args[0], args[1]+1):
+            rule_numbers.add(i)
+
+    print(rule_numbers)
 
     rule_fsts = []
     for index, rule in enumerate(rule_fsts_stream):
         if index in rule_numbers:
             rule_fsts.append(rule)
+
+    # What rules are we intersecting?
+    for rule in rule_fsts:
+        print(rule.get_name())
 
     print('Creating universal language FST...', file=sys.stderr)
     output = hfst.regex('?* ;')
@@ -36,8 +44,6 @@ def get_fst(start_rule, end_rule, *args):
     output.compose_intersect(rule_fsts)
     print('Optimizing for fast lookup...', file=sys.stderr)
     output.lookup_optimize()
-    print('Writing out final FST...', file=sys.stderr)
-    output.write_to_file(final.name)
     #else:
     #    ol_fst_stream = hfst.HfstInputStream(final.name)
     #    output = next(ol_fst_stream)
@@ -126,13 +132,6 @@ def test_final_devoicing():
     start_rule = 13
     end_rule = 13
     test(text, truth, start_rule, end_rule)
-
-
-#######################
-##### Problems ########
-# и́зб => и́сп != и́зп
-# про́сьба => про́с'бъ != про́з'бъ
-
 
 def test_cluster_unvoiced_assimilation():
     text =  ["тру́бка", "ло́дка", "вку́с", "коро́бка", "ска́зка", "второ́й"]

@@ -91,35 +91,35 @@ Definitions
 Rules
 
 !! ============================================================================
-"Rule 0: Soften consonants before 'soft' vowels and ь (excluding { Ж ж Ц ц Ш ш Ч ч Щ щ Й й })"
+"Rule 00: Soften consonants before 'soft' vowels and ь (excluding { Ж ж Ц ц Ш ш Ч ч Щ щ Й й })"
 0:' <=> CNoSoftHard: _ [ SoftV: | ь: ] ;
 
 !! ============================================================================
-"Rule 1: 0>й (lowercase) between vowels, word-initially, and after hard-/soft-signs"
+"Rule 01: 0>й (lowercase) between vowels, word-initially, and after hard-/soft-signs"
 0:й <=>  [ V: | ь: | ъ: | .#. ] _ [ ю́: | ю: | ё: | я́: | я: | е́: | е: ] ;
 
 !! ============================================================================
-"Rule 2: 0>Й (uppercase) between vowels, word-initially, and after hard-/soft-signs"
+"Rule 02: 0>Й (uppercase) between vowels, word-initially, and after hard-/soft-signs"
 0:Й <=>  [ V: | Ь: | Ъ: | .#. ] _ [ Ю́: | Ю: | Ё: | Я́: | Я: | Е́: | Е: ] ;
 
 !! ============================================================================
-"Rule 3: 0>й (lowercase) after hard-/soft-signs"
+"Rule 03: 0>й (lowercase) after hard-/soft-signs"
 ! TODO: Does this also work after the beginning of a word? иголка
 0:й <=> [ ь: | ъ: ] _ [ и́: | и: ];
 
 !! ============================================================================
-"Rule 4: 0>Й (uppercase) after hard-/soft-signs"
+"Rule 04: 0>Й (uppercase) after hard-/soft-signs"
 0:Й <=> [ Ь: | Ъ: ] _ [ И́: | И: ];
 
 !! ============================================================================
-"Rule 5: Yeri rule: after hard consonants и is pronounced as ы"
+"Rule 05: Yeri rule: after hard consonants и is pronounced as ы"
 Vx:Vy <=> HardC _ ;
 where Vx in ( И́ И и́ и )
       Vy in ( Ы́ Ы ы́ ы )
   matched ;
 
 !! ============================================================================
-"Rule 6: Akanje: Unstressed vowel reduction for { о а } in pre-tonic location and word-initially"
+"Rule 06: Akanje: Unstressed vowel reduction for { о а } in pre-tonic location and word-initially"
 Vx:Vy <=> [: - StressedV:] _ [:C | ь: | :']* StressedV: ;
           .#. _ ;
 where Vx in ( О о А а )
@@ -127,7 +127,7 @@ where Vx in ( О о А а )
   matched ;
 
 !! ============================================================================
-"Rule 7: Akanje: Unstressed vowel reduction for { о а } in non-pre-tonic and post-tonic location"
+"Rule 07: Akanje: Unstressed vowel reduction for { о а } in non-pre-tonic and post-tonic location"
 Vx:Vy <=> [: - .#.] _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
           StressedV: :* _ [: - StressedV:]* .#. ;
 where Vx in ( О о А а )
@@ -135,14 +135,14 @@ where Vx in ( О о А а )
   matched ;
 
 !! ============================================================================
-"Rule 8: Tense я́ and е́"
+"Rule 08: Tense я́ and е́"
 Vx:Vy <=> [ :CNoSoftHard :' | :SoftC ] _ [ :CNoSoftHard :' | :SoftC ] ;
 where Vx in ( Я́ я́ А́ а́ Е́ е́ )
       Vy in ( А̂ а̂ А̂ а̂ Э̂ э̂ )
  matched ;
 
 !! ============================================================================
-"Rule 9: Ikanje: Unstressed vowel reduction for { я е } in pre-tonic location"
+"Rule 09: Ikanje: Unstressed vowel reduction for { я е } in pre-tonic location"
 Vx:Vy <=> [: - [ HardC: ]] _ [:C | ь: | :']* StressedV: ;
 where Vx in ( Я я Е е )
       Vy in ( И и И и )
@@ -225,3 +225,5 @@ where Cx in ( П п Ф ф К к Т т Ш ш С с )
 !!! ============================================================================
 !"Conversion of { тс } in endings { ятся } to { ц }"
 !TODO:
+
+!!! в коридоре -> get rid of spaces
