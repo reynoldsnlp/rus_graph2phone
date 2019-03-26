@@ -187,5 +187,10 @@ if __name__ == '__main__':
         "cluster_voice_assimilation": test_cluster_voice_assimilation,
         "softness_assimilation": test_softness_assimilation
     }
-    func = switcher.get(sys.argv[1], test_words)
+
+    arg = "words"
+    if len(sys.argv) > 1:
+        arg = sys.argv[1]
+
+    func = switcher.get(arg)
     func()
