@@ -195,7 +195,7 @@ where Cx in ( Б б В в Г г Д д Ж ж З з )
 !! Rule 14
 !! ============================================================================
 "Unvoiced Assimilation: Consonant clusters with unvoiced consonant at end of the cluster"
-Cx:Cy <=>  _ [:']* :UnvoicedPairedC ;
+Cx:Cy <=>  _ [ :' | :0 ]* :UnvoicedPairedC ;
 where Cx in ( Б б В в Г г Д д Ж ж З з )
       Cy in ( П п Ф ф К к Т т Ш ш С с )
   matched ;
@@ -203,7 +203,7 @@ where Cx in ( Б б В в Г г Д д Ж ж З з )
 !! Rule 15
 !! ============================================================================
 "Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
-Cx:Cy <=>  _ [:']* :VoicedPairedCNoB ;
+Cx:Cy <=>  _ [ :' | :0 ]* :VoicedPairedCNoB ;
 where Cx in ( П п Ф ф К к Т т Ш ш С с )
       Cy in ( Б б В в Г г Д д Ж ж З з )
   matched ;

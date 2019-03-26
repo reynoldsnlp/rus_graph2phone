@@ -18,6 +18,7 @@ def get_fst(start_rule, end_rule, *args):
     print('Preparing rule transducers for composition...', file=sys.stderr)
     rule_fsts_stream = hfst.HfstInputStream(tmp.name)
 
+
     rule_numbers = set()
     rule_numbers.add(0)
     for index in range(start_rule, end_rule + 1):
@@ -28,8 +29,12 @@ def get_fst(start_rule, end_rule, *args):
 
     rule_fsts = []
     for index, rule in enumerate(rule_fsts_stream.read_all()):
-        if index in rule_numbers:
+        print(rule.get_name())
+        if index < 18:#in rule_numbers:
             rule_fsts.append(rule)
+        if index > 18:
+            rulse_fsts.append(rule)
+
 
     print('Creating universal language FST...', file=sys.stderr)
     output = hfst.regex('?* ;')
@@ -190,5 +195,5 @@ if __name__ == '__main__':
         "cluster_voice_assimilation": test_cluster_voice_assimilation,
         "softness_assimilation": test_softness_assimilation
     }
-    func = switcher.get(sys.argv[1], lambda: "Function to test")
+    func = switcher.get(sys.argv[1], test_words)
     func()
