@@ -7,14 +7,8 @@ import csv
 def get_fst(start_rule, end_rule, *args):
     src = Path('g2p.twolc')
     tmp = Path('g2p_test_from_py.tmp.hfst')
-    final = Path('g2p_test_from_py.hfstol')
-    #if (not tmp.exists()) or (src.stat().st_mtime > tmp.stat().st_mtime):
-    #    print('Compiling twolc rules...', file=sys.stderr)
     hfst.compile_twolc_file(src.name, tmp.name,
                                 resolve_left_conflicts=True)
-    #if (not final.exists()) or not (src.stat().st_mtime <
-    #                                tmp.stat().st_mtime <
-    #                                final.stat().st_mtime):
     print('Preparing rule transducers for composition...', file=sys.stderr)
     rule_fsts_stream = hfst.HfstInputStream(tmp.name)
 
@@ -44,9 +38,6 @@ def get_fst(start_rule, end_rule, *args):
     output.compose_intersect(rule_fsts)
     print('Optimizing for fast lookup...', file=sys.stderr)
     output.lookup_optimize()
-    #else:
-    #    ol_fst_stream = hfst.HfstInputStream(final.name)
-    #    output = next(ol_fst_stream)
     return output
 
 
@@ -146,9 +137,6 @@ def test_cluster_voice_assimilation():
     start_rule = 15
     end_rule = 15
     test(text, truth, start_rule, end_rule)
-
-
-
 
 def test_softness_assimilation():
     text =  ["ча́сть",   "вперёд",    "две́рь",  "вме́сте",     "ски́дка",  "клева́ть",  "твёрдая",  "присе́сть",    "проче́сть",   "сове́тница"]
