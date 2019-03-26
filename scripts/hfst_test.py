@@ -18,23 +18,16 @@ def get_fst(start_rule, end_rule, *args):
     print('Preparing rule transducers for composition...', file=sys.stderr)
     rule_fsts_stream = hfst.HfstInputStream(tmp.name)
 
-
     rule_numbers = set()
     rule_numbers.add(0)
-    for index in range(start_rule, end_rule + 1):
-        rule_numbers.add(index)
+    rule_numbers.add(range(start_rule, end_rule + 1))
     if (len(args) > 0):
-        for index in range(args[0], args[1]+1):
-            rule_numbers.add(index)
+        rule_numbers.add(range(args[0], args[1]+1))
 
     rule_fsts = []
-    for index, rule in enumerate(rule_fsts_stream.read_all()):
-        print(rule.get_name())
-        if index < 18:#in rule_numbers:
+    for index, rule in enumerate(rule_fsts_stream):
+        if index in rule_numbers:
             rule_fsts.append(rule)
-        if index > 18:
-            rulse_fsts.append(rule)
-
 
     print('Creating universal language FST...', file=sys.stderr)
     output = hfst.regex('?* ;')
