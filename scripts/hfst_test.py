@@ -2,6 +2,7 @@ from pathlib import Path
 import sys
 
 import hfst
+import csv
 
 def get_fst(start_rule, end_rule, *args):
     src = Path('g2p.twolc')
@@ -19,12 +20,14 @@ def get_fst(start_rule, end_rule, *args):
 
     rule_numbers = set()
     rule_numbers.add(0)
-    rule_numbers.add(range(start_rule, end_rule + 1))
+    for index in range(start_rule, end_rule + 1):
+        rule_numbers.add(index)
     if (len(args) > 0):
-        rule_numbers.add(range(args[0], args[1]+1))
+        for index in range(args[0], args[1]+1):
+            rule_numbers.add(index)
 
     rule_fsts = []
-    for index, rule in enumerate(rule_fsts_stream):
+    for index, rule in enumerate(rule_fsts_stream.read_all()):
         if index in rule_numbers:
             rule_fsts.append(rule)
 
@@ -51,7 +54,7 @@ def test(text, truth, start_rule, end_rule, *args):
         outwords = fst.lookup(word)
         output = [w for w, wt in outwords][0]
         if (output != truth[index]):
-            print(f'{word}{" => ".join(truth[index])}{" != ".join(output)}\n')
+            print("\n" + word + " => " + output + " != " + truth[index])
         else:
             print('.', end='', flush=True, file=sys.stderr)
 
@@ -126,6 +129,13 @@ def test_final_devoicing():
     end_rule = 13
     test(text, truth, start_rule, end_rule)
 
+
+#######################
+##### Problems ########
+# и́зб => и́сп != и́зп
+# про́сьба => про́с'бъ != про́з'бъ
+
+
 def test_cluster_unvoiced_assimilation():
     text =  ["тру́бка", "ло́дка", "вку́с", "коро́бка", "ска́зка", "второ́й"]
     truth = ["тру́пкъ", "ло́ткъ", "фку́с", "кʌро́пкъ", "ска́скъ", "фтʌро́й"]
@@ -139,6 +149,9 @@ def test_cluster_voice_assimilation():
     start_rule = 15
     end_rule = 15
     test(text, truth, start_rule, end_rule)
+
+
+
 
 def test_softness_assimilation():
     text =  ["ча́сть",   "вперёд",    "две́рь",  "вме́сте",     "ски́дка",  "клева́ть",  "твёрдая",  "присе́сть",    "проче́сть",   "сове́тница"]
