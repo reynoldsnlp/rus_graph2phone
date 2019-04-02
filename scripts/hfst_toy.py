@@ -1,7 +1,8 @@
 import csv
 from pathlib import Path
 import sys
-
+import udar
+import re
 import hfst
 
 
@@ -42,15 +43,50 @@ def get_fst():
         output = next(ol_fst_stream)
     return output
 
+def get_case_fst():
+    pass
 
 def test_RPT(words):
     fst = get_fst()
+    analyzer = udar.Udar('analyzer')
     output = []
     print('Processing test words...', file=sys.stderr)
     for inword in words:  # for inword, outword in words:
         print('.', end='', flush=True, file=sys.stderr)
         outwords = fst.lookup(inword)
-        output.append(f'{inword}\n{", ".join([w for w, wt in outwords])}\n\n')
+        outword = [w for w, wt in outwords]
+        #for word in outword:
+        token = analyzer.lookup(inword)
+        isGen = False
+        for reading in token.readings:
+            if 'Gen' in reading:
+                isGen = True
+                print(inword, reading, outword[0])
+
+                #print(outword[0])
+                """outword = re.sub("ь\Z", "ъ", outword[0])
+                outword = re.sub("ьт\Z", "ът", outword[0])
+                outword = re.sub("т'с'ь\Z", "т'с'ъ", outword[0])
+                outword = re.sub("ьс'\Z", "ъс'", outword[0])
+                outword = re.sub("ьх\Z", "ъх", outword[0])
+                outword = re.sub("ьм\Z", "ъм", outword[0])
+                outword = re.sub("ьм'и\Z", "ъм'и", outword[0])"""
+                """if re.match("ʌго́", outword[0]) is not None:
+                    print(outword[0])
+                outword = re.sub("о́гъ\Z", "о́въ", outword[0])
+                outword = re.sub("ъгъ\Z", "ъвъ", outword[0])
+                outword = re.sub("ьгъ\Z", "ьвъ", outword[0])
+                outword = re.sub("э́гъ\Z", "э́въ", outword[0])
+                outword = re.sub("ʌго́\Z", "ʌво́", outword[0])
+                outword = re.sub("иго́\Z", "иво́", outword[0])"""
+        if(isGen):
+            outword = re.sub("о́гъ\Z", "о́въ", outword[0])
+            outword = re.sub("ъгъ\Z", "ъвъ", outword[0])
+            outword = re.sub("ьгъ\Z", "ьвъ", outword[0])
+            outword = re.sub("э́гъ\Z", "э́въ", outword[0])
+            outword = re.sub("ʌго́\Z", "ʌво́", outword[0])
+            outword = re.sub("иго́\Z", "иво́", outword[0])
+        output.append(f'{inword}\n{", ".join(outword)}\n\n')
     return output
 
 
