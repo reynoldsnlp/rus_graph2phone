@@ -204,26 +204,9 @@ where Cx in ( П п Ф ф К к Т т Ш ш С с )
 "Rule 18: Softness Assimilation: Velar"
 0:' <=> :VEL _ :VEL :' ;
 
-
-
-!! Rules to define
-!!! ============================================================================
-!TODO: In endings like ят it could be a noun and thus wouldn't have the same pronunciation as the verb form
-! алкоголя́т (although this is stressed, are there any other examples?)
-! TODO: identify where this is misfiring (e.g. wrong pos)
-!"Ikanje: Unstressed vowel reduction for { я } in word-ending"
-!Vx:Vy <=> _ [ т: | т: с: я: | с: ь: | х: | м: | м: и: ]? .#. ;
-!
-!where Vx in ( Я я )
-!      Vy in ( Ъ ъ )
-! matched ;
-!
-!!! ============================================================================
-!"Conversion of { ого его } in endings to { ово 'эво }"
-!TODO: Do we just list out several words that change this way?
-!
 !!! ============================================================================
 !"Conversion of { тс } in endings { ятся } to { ц }"
 !TODO:
-
+! яться  is it hard or soft ц
+! ятся   подкрепля́ться -> пʌдкрипл'а̂т'съ
 !!! в коридоре -> get rid of spaces

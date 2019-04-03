@@ -1,8 +1,9 @@
 from pathlib import Path
 import sys
-
+import udar
 import hfst
 import csv
+import re
 
 def get_fst(start_rule, end_rule, *args):
     src = Path('g2p.twolc')
@@ -20,7 +21,7 @@ def get_fst(start_rule, end_rule, *args):
         for i in range(args[0], args[1]+1):
             rule_numbers.add(i)
 
-    print(rule_numbers)
+    #print(rule_numbers)
 
     rule_fsts = []
     for index, rule in enumerate(rule_fsts_stream):
@@ -28,8 +29,8 @@ def get_fst(start_rule, end_rule, *args):
             rule_fsts.append(rule)
 
     # What rules are we intersecting?
-    for rule in rule_fsts:
-        print(rule.get_name())
+    #for rule in rule_fsts:
+    #    print(rule.get_name())
 
     print('Creating universal language FST...', file=sys.stderr)
     output = hfst.regex('?* ;')
@@ -43,11 +44,33 @@ def get_fst(start_rule, end_rule, *args):
 
 def test(text, truth, start_rule, end_rule, *args):
     fst = get_fst(start_rule, end_rule, *args);
+    analyzer = udar.Udar('analyzer')
     output = []
     print('Processing test words...', file=sys.stderr)
-    for index, word in enumerate(text):  # for inword, outword in words:
-        outwords = fst.lookup(word)
-        output = [w for w, wt in outwords][0]
+    for index, word in enumerate(text):  # for inword, output in words:
+        outputs = fst.lookup(word)
+        output = [w for w, wt in outputs][0]
+        output = output
+        token = analyzer.lookup(word)
+        if 'Gen' in token:
+            output = re.sub("о́гъ\Z", "о́въ", output)
+            output = re.sub("ъгъ\Z", "ъвъ", output)
+            output = re.sub("ьгъ\Z", "ьвъ", output)
+            output = re.sub("э́гъ\Z", "э́въ", output)
+            output = re.sub("ʌго́\Z", "ʌво́", output)
+            output = re.sub("иго́\Z", "иво́", output)
+        if 'Pl3' in token:
+            output = re.sub("ьт\Z", "ът", output)
+        if 'Loc' in token:
+            output = re.sub("ьх\Z", "ъх", output)
+        if 'Dat' in token:
+            output = re.sub("ьм\Z", "ъм", output)
+        if 'Ins' in token:
+            output = re.sub("ьм'и\Z", "ъм'и", output)
+        if word.endswith("я"):
+            output = re.sub("ь\Z", "ъ", output)
+            output = re.sub("т'с'ь\Z", "т'с'ъ", output)
+        output = re.sub("ьс'\Z", "ъс'", output)
         if (output != truth[index]):
             print("\n" + word + " => " + output + " != " + truth[index])
         else:

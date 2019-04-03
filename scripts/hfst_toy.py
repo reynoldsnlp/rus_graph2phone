@@ -1,9 +1,9 @@
 import csv
 from pathlib import Path
 import sys
-import udar
 import re
 import hfst
+import udar
 
 
 def read_from_csv():
@@ -11,7 +11,7 @@ def read_from_csv():
     datareader = csv.reader(datafile, delimiter=',')
     data = []
     for row in datareader:
-        data.append((row[0], row[1]))
+        data.append((row, row[1]))
     return data
 
 
@@ -55,38 +55,28 @@ def test_RPT(words):
         print('.', end='', flush=True, file=sys.stderr)
         outwords = fst.lookup(inword)
         outword = [w for w, wt in outwords]
-        #for word in outword:
+        outword = outword[0]
         token = analyzer.lookup(inword)
-        isGen = False
-        for reading in token.readings:
-            if 'Gen' in reading:
-                isGen = True
-                print(inword, reading, outword[0])
-
-                #print(outword[0])
-                """outword = re.sub("ь\Z", "ъ", outword[0])
-                outword = re.sub("ьт\Z", "ът", outword[0])
-                outword = re.sub("т'с'ь\Z", "т'с'ъ", outword[0])
-                outword = re.sub("ьс'\Z", "ъс'", outword[0])
-                outword = re.sub("ьх\Z", "ъх", outword[0])
-                outword = re.sub("ьм\Z", "ъм", outword[0])
-                outword = re.sub("ьм'и\Z", "ъм'и", outword[0])"""
-                """if re.match("ʌго́", outword[0]) is not None:
-                    print(outword[0])
-                outword = re.sub("о́гъ\Z", "о́въ", outword[0])
-                outword = re.sub("ъгъ\Z", "ъвъ", outword[0])
-                outword = re.sub("ьгъ\Z", "ьвъ", outword[0])
-                outword = re.sub("э́гъ\Z", "э́въ", outword[0])
-                outword = re.sub("ʌго́\Z", "ʌво́", outword[0])
-                outword = re.sub("иго́\Z", "иво́", outword[0])"""
-        if(isGen):
-            outword = re.sub("о́гъ\Z", "о́въ", outword[0])
-            outword = re.sub("ъгъ\Z", "ъвъ", outword[0])
-            outword = re.sub("ьгъ\Z", "ьвъ", outword[0])
-            outword = re.sub("э́гъ\Z", "э́въ", outword[0])
-            outword = re.sub("ʌго́\Z", "ʌво́", outword[0])
-            outword = re.sub("иго́\Z", "иво́", outword[0])
-        output.append(f'{inword}\n{", ".join(outword)}\n\n')
+        if 'Gen' in token:
+            outword = re.sub("о́гъ\Z", "о́въ", outword)
+            outword = re.sub("ъгъ\Z", "ъвъ", outword)
+            outword = re.sub("ьгъ\Z", "ьвъ", outword)
+            outword = re.sub("э́гъ\Z", "э́въ", outword)
+            outword = re.sub("ʌго́\Z", "ʌво́", outword)
+            outword = re.sub("иго́\Z", "иво́", outword)
+        if 'Pl3' in token:
+            outword = re.sub("ьт\Z", "ът", outword)
+        if 'Loc' in token:
+            outword = re.sub("ьх\Z", "ъх", outword)
+        if 'Dat' in token:
+            outword = re.sub("ьм\Z", "ъм", outword)
+        if 'Ins' in token:
+            outword = re.sub("ьм'и\Z", "ъм'и", outword)
+        if inword.endswith("я"):
+            outword = re.sub("ь\Z", "ъ", outword)
+            outword = re.sub("т'с'ь\Z", "т'с'ъ", outword)
+        outword = re.sub("ьс'\Z", "ъс'", outword)
+        output.append(f'{inword}\n{", ".join([outword])}\n\n')
     return output
 
 
