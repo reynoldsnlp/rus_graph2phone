@@ -76,11 +76,8 @@ SoftV = Е Ё И Ю Я
         е́ ё́ и́ ю́ я́ ;
 
 YaEndings = Pl3 Loc Dat Ins EndsWithYa EndsWithYas ;
-! [:* - [ Gen: | Pl3: | Loc: | Dat: | Ins: | EndsWithYa: | EndsWithYas:]]
 
 Definitions
-
-EndNoMorph = [ Gen: | Pl3: | Loc: | Dat: | Ins: | EndsWithYa: | EndsWithYas:]* .#. ;
 
 Rules
 
@@ -123,7 +120,7 @@ where Vx in ( О о А а )
 !! ============================================================================
 "Rule 07: Akanje: Unstressed vowel reduction for { о а } in non-pre-tonic and post-tonic location"
 Vx:Vy <=> [: - .#.] _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
-          StressedV: :* _ [: - StressedV:]* EndNoMorph ;
+          StressedV: :* _ [: - StressedV:]* .#. ;
 where Vx in ( О о А а )
       Vy in ( Ъ ъ Ъ ъ )
   matched ;
@@ -143,20 +140,20 @@ where Vx in ( Я я Е е )
  matched ;
 
 !! ============================================================================
-"Rule 10a: Ikanje: Unstressed vowel reduction for { я е } in non-pre-tonic location, word-initially and post-tonic"
+"Rule 10a: Ikanje: Unstressed vowel reduction for { я } in non-pre-tonic location, word-initially and post-tonic"
 Vx:Vy <=> [: - [ HardC: ]] _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
-         StressedV: [: - [ HardC:]]* _ [: - [StressedV: | YaEndings: ]]* .#. ;
+          StressedV: [: - [ HardC:]]* _ [: - [StressedV: | YaEndings: ]]* .#. ;
 where Vx in ( Я я )
       Vy in ( Ь ь )
-matched ;
+  matched ;
 
 !! ============================================================================
-"Rule 10b: Ikanje: Unstressed vowel reduction for { я е } in non-pre-tonic location, word-initially and post-tonic"
+"Rule 10b: Ikanje: Unstressed vowel reduction for { е } in non-pre-tonic location, word-initially and post-tonic"
 Vx:Vy <=> [: - [ HardC: ]] _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
-         StressedV: [: - [ HardC:]]* _ [: - [StressedV:]]* .#. ;
+        StressedV: [: - [ HardC:]]* _ [: - [StressedV:]]* .#. ;
 where Vx in ( Е е )
       Vy in ( Ь ь )
-matched ;
+  matched ;
 
 !! ============================================================================
 "Rule 11: Ykanje: unstressed vowel reduction for { е } after { ж ш ц } in pre-tonic location"
@@ -168,14 +165,14 @@ where Vx in ( Е е )
 !! ============================================================================
 "Rule 12: Ykanje: unstressed е after { ж ш ц } in non-pre-tonic location"
 Vx:Vy <=> HardC: _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
-          StressedV: :* HardC: _ ;
+         StressedV: :* HardC: _ ;
 where Vx in ( Е е )
       Vy in ( Ъ ъ )
   matched ;
 
 !! ============================================================================
 "Rule 13: Voice Assimilation: Final devoicing"
-Cx:Cy <=> _ [ :' | :0 ]* EndNoMorph ;
+Cx:Cy <=> _ [ :' | :0 ]* [ Gen: | YaEndings: ]* .#. ;
 where Cx in ( Б б В в Г г Д д Ж ж З з )
       Cy in ( П п Ф ф К к Т т Ш ш С с )
   matched ;
@@ -199,7 +196,7 @@ where Cx in ( П п Ф ф К к Т т Ш ш С с )
 0:' <=>:DEN _ :DEN :' ;
 
 !! ============================================================================
-"Rule 17: Softness Assimilation: Labials, { В в } doesn't force assimilation"
+"Rule 17: Softness Assimilation: Labials"
 0:' <=> :LAB _ :LAB :' ;
 
 !! ============================================================================
@@ -208,7 +205,7 @@ where Cx in ( П п Ф ф К к Т т Ш ш С с )
 
 !! ============================================================================
 "Rule 19: Conversion of г to в"
-Vx:Vy <=> [ о: | о́: | е: | О: | О́: | Е: ] _ [ о: | о́: | О: | О́:] Gen: EndsWithYa:? .#. ;
+Vx:Vy <=> [ о: | о́: | е: | О: | О́: | Е: ] _ [ о: | о́: | О: | О́:] Gen: YaEndings:* .#. ;
 where Vx in ( Г г )
       Vy in ( В в )
   matched ;
@@ -224,6 +221,7 @@ Vx:Vy <=> _ [ т: | Т: ] Pl3: .#. ;                !Pl3 ят
 where Vx in ( Я я )
       Vy in ( Ъ ъ )
   matched ;
+
 
 !!! ============================================================================
 !"Conversion of { тс } in endings { ятся } to { ц }"
