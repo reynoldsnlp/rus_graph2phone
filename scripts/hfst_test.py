@@ -45,32 +45,25 @@ def get_fst(start_rule, end_rule, *args):
 def test(text, truth, start_rule, end_rule, *args):
     fst = get_fst(start_rule, end_rule, *args);
     analyzer = udar.Udar('analyzer')
-    output = []
     print('Processing test words...', file=sys.stderr)
-    for index, word in enumerate(text):  # for inword, output in words:
-        outputs = fst.lookup(word)
-        output = [w for w, wt in outputs][0]
-        output = output
-        token = analyzer.lookup(word)
+    for index, inword in enumerate(text):  # for inword, output in words:
+        token = analyzer.lookup(inword)
         if 'Gen' in token:
-            output = re.sub("о́гъ\Z", "о́въ", output)
-            output = re.sub("ъгъ\Z", "ъвъ", output)
-            output = re.sub("ьгъ\Z", "ьвъ", output)
-            output = re.sub("э́гъ\Z", "э́въ", output)
-            output = re.sub("ʌго́\Z", "ʌво́", output)
-            output = re.sub("иго́\Z", "иво́", output)
+            inword = inword + "Gen"
         if 'Pl3' in token:
-            output = re.sub("ьт\Z", "ът", output)
+            inword = inword + "Pl3"
         if 'Loc' in token:
-            output = re.sub("ьх\Z", "ъх", output)
+            inword = inword + "Loc"
         if 'Dat' in token:
-            output = re.sub("ьм\Z", "ъм", output)
+            inword = inword + "Dat"
         if 'Ins' in token:
-            output = re.sub("ьм'и\Z", "ъм'и", output)
-        if word.endswith("я"):
-            output = re.sub("ь\Z", "ъ", output)
-            output = re.sub("т'с'ь\Z", "т'с'ъ", output)
-        output = re.sub("ьс'\Z", "ъс'", output)
+            inword = inword + "Ins"
+        if inword.endswith("я") or inword.endswith("Я"):
+            inword = inword + "EndsWithYa"
+        if inword.endswith("ясь") or inword.endswith("ЯСЬ"):
+            inword = inword +"EndsWithYas"
+        outputs = fst.lookup(inword)
+        output = [w for w, wt in outputs][0]
         if (output != truth[index]):
             print("\n" + word + " => " + output + " != " + truth[index])
         else:

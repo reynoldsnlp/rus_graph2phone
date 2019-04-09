@@ -21,8 +21,7 @@ def get_fst():
     final = Path('g2p_from_py.hfstol')
     if (not tmp.exists()) or (src.stat().st_mtime > tmp.stat().st_mtime):
         print('Compiling twolc rules...', file=sys.stderr)
-        hfst.compile_twolc_file(src.name, tmp.name,
-                                resolve_left_conflicts=True)
+        hfst.compile_twolc_file(src.name, tmp.name, resolve_left_conflicts=True)
     if (not final.exists()) or not (src.stat().st_mtime <
                                     tmp.stat().st_mtime <
                                     final.stat().st_mtime):
@@ -53,30 +52,23 @@ def test_RPT(words):
     print('Processing test words...', file=sys.stderr)
     for inword in words:  # for inword, outword in words:
         print('.', end='', flush=True, file=sys.stderr)
-        outwords = fst.lookup(inword)
-        outword = [w for w, wt in outwords]
-        outword = outword[0]
         token = analyzer.lookup(inword)
         if 'Gen' in token:
-            outword = re.sub("о́гъ\Z", "о́въ", outword)
-            outword = re.sub("ъгъ\Z", "ъвъ", outword)
-            outword = re.sub("ьгъ\Z", "ьвъ", outword)
-            outword = re.sub("э́гъ\Z", "э́въ", outword)
-            outword = re.sub("ʌго́\Z", "ʌво́", outword)
-            outword = re.sub("иго́\Z", "иво́", outword)
+            inword = inword + "Gen"
         if 'Pl3' in token:
-            outword = re.sub("ьт\Z", "ът", outword)
+            inword = inword + "Pl3"
         if 'Loc' in token:
-            outword = re.sub("ьх\Z", "ъх", outword)
+            inword = inword + "Loc"
         if 'Dat' in token:
-            outword = re.sub("ьм\Z", "ъм", outword)
+            inword = inword + "Dat"
         if 'Ins' in token:
-            outword = re.sub("ьм'и\Z", "ъм'и", outword)
-        if inword.endswith("я"):
-            outword = re.sub("ь\Z", "ъ", outword)
-            outword = re.sub("т'с'ь\Z", "т'с'ъ", outword)
-        outword = re.sub("ьс'\Z", "ъс'", outword)
-        output.append(f'{inword}\n{", ".join([outword])}\n\n')
+            inword = inword + "Ins"
+        if inword.endswith("я") or inword.endswith("Я"):
+            inword = inword + "EndsWithYa"
+        if inword.endswith("ясь") or inword.endswith("ЯСЬ"):
+            inword = inword +"EndsWithYas"
+        outwords = fst.lookup(inword)
+        output.append(f'{inword}\n{", ".join([w for w, wt in outwords])}\n\n')
     return output
 
 

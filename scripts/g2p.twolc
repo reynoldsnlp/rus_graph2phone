@@ -1,6 +1,8 @@
 
 Alphabet
 
+      Gen:0 Pl3:0 Loc:0 Dat:0 Ins:0 EndsWithYa:0 EndsWithYas:0  ! Udar Morphology
+
       %  ! space
       %-
 
@@ -85,6 +87,8 @@ SoftV = Е Ё И Ю Я
         е ё и ю я
         е́ ё́ и́ ю́ я́ ;
 
+YaEndings = Pl3 Loc Dat Ins EndsWithYa EndsWithYas ;
+! [:* - [ Gen: | Pl3: | Loc: | Dat: | Ins: | EndsWithYa: | EndsWithYas:]]
 
 Definitions
 
@@ -151,7 +155,7 @@ where Vx in ( Я я Е е )
 !! ============================================================================
 "Rule 10: Ikanje: Unstressed vowel reduction for { я е } in non-pre-tonic location, word-initially and post-tonic"
 Vx:Vy <=> [: - [ HardC: ]] _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
-         StressedV: [: - [ HardC:]]* _ [: - StressedV:]* .#. ;
+         StressedV: [: - [ HardC:]]* _ [: - [StressedV: | YaEndings: ]]* .#. ;
 where Vx in ( Я я Е е )
       Vy in ( Ь ь Ь ь )
 matched ;
@@ -203,6 +207,25 @@ where Cx in ( П п Ф ф К к Т т Ш ш С с )
 !! ============================================================================
 "Rule 18: Softness Assimilation: Velar"
 0:' <=> :VEL _ :VEL :' ;
+
+!! ============================================================================
+"Rule 19: Conversion of г to в"
+Vx:Vy <=> [ о: | о́: | е: | О: | О́: | Е: ] _ [ о | о́ | О: | О́:]  Gen: .#. ;
+where Vx in ( Г г )
+      Vy in ( В в )
+  matched ;
+
+!! ============================================================================
+"Rule 20: я in Endings"
+Vx:Vy <=> _ [ т: | Т: ] Pl3: .#. ;                !Pl3 ят
+          _ [ х: | Х: ] Loc: .#. ;                !Loc ях
+          _ [ м: | М: ] Dat: .#. ;                !Dat ям
+          _ [ м: и: | М: И: ] Ins: .#. ;          !Ins ями
+          _ EndsWithYa: .#. ;                     !EndsWithYa я
+          _ [ с: ь: | С: Ь: ] EndsWithYas: .#. ;  !EndsWithYas ясь
+where Vx in ( Я я )
+      Vy in ( Ъ ъ )
+  matched ;
 
 !!! ============================================================================
 !"Conversion of { тс } in endings { ятся } to { ц }"
