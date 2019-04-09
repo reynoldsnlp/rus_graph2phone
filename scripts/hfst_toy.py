@@ -19,27 +19,27 @@ def get_fst():
     src = Path('g2p.twolc')
     tmp = Path('g2p_from_py.tmp.hfst')
     final = Path('g2p_from_py.hfstol')
-    if (not tmp.exists()) or (src.stat().st_mtime > tmp.stat().st_mtime):
-        print('Compiling twolc rules...', file=sys.stderr)
-        hfst.compile_twolc_file(src.name, tmp.name, resolve_left_conflicts=True)
-    if (not final.exists()) or not (src.stat().st_mtime <
-                                    tmp.stat().st_mtime <
-                                    final.stat().st_mtime):
-        print('Preparing rule transducers for composition...', file=sys.stderr)
-        rule_fsts_stream = hfst.HfstInputStream(tmp.name)
-        rule_fsts = [t for t in rule_fsts_stream]
-        print('Creating universal language FST...', file=sys.stderr)
-        output = hfst.regex('?* ;')
-        print('Compose-intersecting rules with universal FST...',
-              file=sys.stderr)
-        output.compose_intersect(rule_fsts)
-        print('Optimizing for fast lookup...', file=sys.stderr)
-        output.lookup_optimize()
-        print('Writing out final FST...', file=sys.stderr)
-        output.write_to_file(final.name)
-    else:
-        ol_fst_stream = hfst.HfstInputStream(final.name)
-        output = next(ol_fst_stream)
+    #if (not tmp.exists()) or (src.stat().st_mtime > tmp.stat().st_mtime):
+    print('Compiling twolc rules...', file=sys.stderr)
+    hfst.compile_twolc_file(src.name, tmp.name, resolve_left_conflicts=True)
+    #if (not final.exists()) or not (src.stat().st_mtime <
+    #                                tmp.stat().st_mtime <
+    #                                final.stat().st_mtime):
+    print('Preparing rule transducers for composition...', file=sys.stderr)
+    rule_fsts_stream = hfst.HfstInputStream(tmp.name)
+    rule_fsts = [t for t in rule_fsts_stream]
+    print('Creating universal language FST...', file=sys.stderr)
+    output = hfst.regex('?* ;')
+    print('Compose-intersecting rules with universal FST...',
+          file=sys.stderr)
+    output.compose_intersect(rule_fsts)
+    print('Optimizing for fast lookup...', file=sys.stderr)
+    output.lookup_optimize()
+    print('Writing out final FST...', file=sys.stderr)
+    output.write_to_file(final.name)
+    #else:
+    #    ol_fst_stream = hfst.HfstInputStream(final.name)
+    #    output = next(ol_fst_stream)
     return output
 
 def get_case_fst():

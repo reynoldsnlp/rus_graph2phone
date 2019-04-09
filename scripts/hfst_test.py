@@ -65,7 +65,7 @@ def test(text, truth, start_rule, end_rule, *args):
         outputs = fst.lookup(inword)
         output = [w for w, wt in outputs][0]
         if (output != truth[index]):
-            print("\n" + word + " => " + output + " != " + truth[index])
+            print("\n" + inword + " => " + output + " != " + truth[index])
         else:
             print('.', end='', flush=True, file=sys.stderr)
 

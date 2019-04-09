@@ -20,14 +20,6 @@ Alphabet
 
 Sets
 
-Letter = А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я
-         А́         Е́ Ё́     И́           О́         У́               Ы́   Э́ Ю́ Я́
-         А̀         Ѐ Ё̀     Ѝ           О̀         У̀               Ы̀   Э̀ Ю̀ Я̀
-         а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
-         а́         е́ ё́     и́           о́         у́               ы́   э́ ю́ я́
-         а̀         ѐ ё̀     ѝ           о̀         у̀               ы̀   э̀ ю̀ я̀
-         %- %  ;
-
 ! Consonants
 C = Б В Г Д Ж З Й К Л М Н П Р С Т Ф Х Ц Ч Ш Щ
     б в г д ж з й к л м н п р с т ф х ц ч ш щ ;
@@ -39,10 +31,6 @@ CNoSoftHard = Б В Г Д З К Л М Н П Р С Т Ф Х
 ! Unvoiced and paired consonants
 UnvoicedPairedC = К П С Т Ф Ш
                   к п с т ф ш ;
-
-! Voiced and paired consonants
-VoicedPairedC = Б В Г Д Ж З
-                б в г д ж з ;
 
 ! Voiced and paired consonants
 VoicedPairedCNoB = Б Г Д Ж З
@@ -92,6 +80,8 @@ YaEndings = Pl3 Loc Dat Ins EndsWithYa EndsWithYas ;
 
 Definitions
 
+EndNoMorph = [ Gen: | Pl3: | Loc: | Dat: | Ins: | EndsWithYa: | EndsWithYas:]* .#. ;
+
 Rules
 
 !! ============================================================================
@@ -133,7 +123,7 @@ where Vx in ( О о А а )
 !! ============================================================================
 "Rule 07: Akanje: Unstressed vowel reduction for { о а } in non-pre-tonic and post-tonic location"
 Vx:Vy <=> [: - .#.] _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
-          StressedV: :* _ [: - StressedV:]* .#. ;
+          StressedV: :* _ [: - StressedV:]* EndNoMorph ;
 where Vx in ( О о А а )
       Vy in ( Ъ ъ Ъ ъ )
   matched ;
@@ -153,11 +143,19 @@ where Vx in ( Я я Е е )
  matched ;
 
 !! ============================================================================
-"Rule 10: Ikanje: Unstressed vowel reduction for { я е } in non-pre-tonic location, word-initially and post-tonic"
+"Rule 10a: Ikanje: Unstressed vowel reduction for { я е } in non-pre-tonic location, word-initially and post-tonic"
 Vx:Vy <=> [: - [ HardC: ]] _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
          StressedV: [: - [ HardC:]]* _ [: - [StressedV: | YaEndings: ]]* .#. ;
-where Vx in ( Я я Е е )
-      Vy in ( Ь ь Ь ь )
+where Vx in ( Я я )
+      Vy in ( Ь ь )
+matched ;
+
+!! ============================================================================
+"Rule 10b: Ikanje: Unstressed vowel reduction for { я е } in non-pre-tonic location, word-initially and post-tonic"
+Vx:Vy <=> [: - [ HardC: ]] _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
+         StressedV: [: - [ HardC:]]* _ [: - [StressedV:]]* .#. ;
+where Vx in ( Е е )
+      Vy in ( Ь ь )
 matched ;
 
 !! ============================================================================
@@ -177,7 +175,7 @@ where Vx in ( Е е )
 
 !! ============================================================================
 "Rule 13: Voice Assimilation: Final devoicing"
-Cx:Cy <=> _ [ :' | :0 ]* .#. ;
+Cx:Cy <=> _ [ :' | :0 ]* EndNoMorph ;
 where Cx in ( Б б В в Г г Д д Ж ж З з )
       Cy in ( П п Ф ф К к Т т Ш ш С с )
   matched ;
@@ -210,7 +208,7 @@ where Cx in ( П п Ф ф К к Т т Ш ш С с )
 
 !! ============================================================================
 "Rule 19: Conversion of г to в"
-Vx:Vy <=> [ о: | о́: | е: | О: | О́: | Е: ] _ [ о | о́ | О: | О́:]  Gen: .#. ;
+Vx:Vy <=> [ о: | о́: | е: | О: | О́: | Е: ] _ [ о: | о́: | О: | О́:] Gen: EndsWithYa:? .#. ;
 where Vx in ( Г г )
       Vy in ( В в )
   matched ;
@@ -221,7 +219,7 @@ Vx:Vy <=> _ [ т: | Т: ] Pl3: .#. ;                !Pl3 ят
           _ [ х: | Х: ] Loc: .#. ;                !Loc ях
           _ [ м: | М: ] Dat: .#. ;                !Dat ям
           _ [ м: и: | М: И: ] Ins: .#. ;          !Ins ями
-          _ EndsWithYa: .#. ;                     !EndsWithYa я
+          _ Gen:? EndsWithYa: .#. ;                     !EndsWithYa я
           _ [ с: ь: | С: Ь: ] EndsWithYas: .#. ;  !EndsWithYas ясь
 where Vx in ( Я я )
       Vy in ( Ъ ъ )
