@@ -8,8 +8,11 @@ intersect
 y
 g2p-all
 save-binary g2p.xfst
-lex-test-file /tmp/g2p_lex-test.txt /tmp/output_g2p_xfst.txt
+lex-test-file /tmp/g2p_lex-test.txt /tmp/tmp_output_g2p_xfst.txt
 quit\n" | twolc
+
+cat /tmp/tmp_output_g2p_xfst.txt | egrep -v "^  " > /tmp/output_g2p_xfst.txt
+rm /tmp/tmp_output_g2p_xfst.txt
 
 xfst -e "load stack < g2p.xfst" \
      -e "invert net" \
