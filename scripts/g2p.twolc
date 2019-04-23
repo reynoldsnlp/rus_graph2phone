@@ -1,7 +1,7 @@
 
 Alphabet
 
-      Gen:0 Pl3:0 Loc:0 Dat:0 Ins:0 EndsWithYa:0 EndsWithYas:0  ! Udar Morphology
+      G:0 P:0 L:0 D:0 I:0 Y:0 S:0  ! Udar Morphology
 
       %  ! space
       %-
@@ -75,7 +75,7 @@ SoftV = Е Ё И Ю Я
         е ё и ю я
         е́ ё́ и́ ю́ я́ ;
 
-YaEndings = Pl3 Loc Dat Ins EndsWithYa EndsWithYas ;
+YaEndings = P L D I Y S ;
 
 Definitions
 
@@ -84,6 +84,10 @@ Rules
 !! ============================================================================
 "Rule 00: Soften consonants before 'soft' vowels and ь (excluding { Ж ж Ц ц Ш ш Ч ч Щ щ Й й })"
 0:' <=> CNoSoftHard: _ [ SoftV: | ь: ] ;
+
+!! ============================================================================
+!"Rule 20: я in Endings"
+!я:ъ <=> ч: и́: с: т: _ т: P: ;
 
 !! ============================================================================
 "Rule 01: 0>й (lowercase) between vowels, word-initially, and after hard-/soft-signs"
@@ -95,12 +99,11 @@ Rules
 
 !! ============================================================================
 "Rule 03: 0>й (lowercase) after hard-/soft-signs"
-! TODO: Does this also work after the beginning of a word? иголка
-0:й <=> [ ь: | ъ: ] _ [ и́: | и: ];
+0:й <=> [ ь: | ъ: ] _ [ и́: | и: ] ;
 
 !! ============================================================================
 "Rule 04: 0>Й (uppercase) after hard-/soft-signs"
-0:Й <=> [ Ь: | Ъ: ] _ [ И́: | И: ];
+0:Й <=> [ Ь: | Ъ: ] _ [ И́: | И: ] ;
 
 !! ============================================================================
 "Rule 05: Yeri rule: after hard consonants и is pronounced as ы"
@@ -172,7 +175,7 @@ where Vx in ( Е е )
 
 !! ============================================================================
 "Rule 13: Voice Assimilation: Final devoicing"
-Cx:Cy <=> _ [ :' | :0 ]* [ Gen: | YaEndings: ]* .#. ;
+Cx:Cy <=> _ [ :' | :0 ]* [ G: | YaEndings: ]* .#. ;
 where Cx in ( Б б В в Г г Д д Ж ж З з )
       Cy in ( П п Ф ф К к Т т Ш ш С с )
   matched ;
@@ -193,7 +196,7 @@ where Cx in ( П п Ф ф К к Т т Ш ш С с )
 
 !! ============================================================================
 "Rule 16: Softness Assimilation: Dentals"
-0:' <=>:DEN _ :DEN :' ;
+0:' <=> :DEN _ :DEN :' ;
 
 !! ============================================================================
 "Rule 17: Softness Assimilation: Labials"
@@ -205,23 +208,22 @@ where Cx in ( П п Ф ф К к Т т Ш ш С с )
 
 !! ============================================================================
 "Rule 19: Conversion of г to в"
-Vx:Vy <=> [ о: | о́: | е: | О: | О́: | Е: ] _ [ о: | о́: | О: | О́:] Gen: YaEndings:* .#. ;
+Vx:Vy <=> [ о: | о́: | е: | О: | О́: | Е: ] _ [ о: | о́: | О: | О́:] G: YaEndings:* .#. ;
 where Vx in ( Г г )
       Vy in ( В в )
   matched ;
 
 !! ============================================================================
 "Rule 20: я in Endings"
-Vx:Vy <=> _ [ т: | Т: ] Pl3: .#. ;                !Pl3 ят
-          _ [ х: | Х: ] Loc: .#. ;                !Loc ях
-          _ [ м: | М: ] Dat: .#. ;                !Dat ям
-          _ [ м: и: | М: И: ] Ins: .#. ;          !Ins ями
-          _ Gen:? EndsWithYa: .#. ;                     !EndsWithYa я
-          _ [ с: ь: | С: Ь: ] EndsWithYas: .#. ;  !EndsWithYas ясь
+Vx:Vy <=> _ [ т: | Т: ] P: ; !.#. ;                !Pl3 ят
+          _ [ х: | Х: ] L: ; !.#. ;                !Loc ях
+          _ [ м: | М: ] D: .#. ;                !Dat ям
+          _ [ м: и: | М: И: ] I: .#. ;          !Ins ями
+          _ G:? Y: ; !.#. ;                     !EndsWithYa я
+          _ [ с: ь: | С: Ь: ] S: .#. ;  !EndsWithYas ясь
 where Vx in ( Я я )
       Vy in ( Ъ ъ )
   matched ;
-
 
 !!! ============================================================================
 !"Conversion of { тс } in endings { ятся } to { ц }"

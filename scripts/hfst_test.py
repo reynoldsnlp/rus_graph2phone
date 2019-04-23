@@ -49,19 +49,19 @@ def test(text, truth, start_rule, end_rule, *args):
     for index, inword in enumerate(text):  # for inword, output in words:
         token = analyzer.lookup(inword)
         if 'Gen' in token:
-            inword = inword + "Gen"
+            inword = inword + "G"
         if 'Pl3' in token:
-            inword = inword + "Pl3"
+            inword = inword + "P"
         if 'Loc' in token:
-            inword = inword + "Loc"
+            inword = inword + "L"
         if 'Dat' in token:
-            inword = inword + "Dat"
+            inword = inword + "D"
         if 'Ins' in token:
-            inword = inword + "Ins"
+            inword = inword + "I"
         if inword.endswith("я") or inword.endswith("Я"):
-            inword = inword + "EndsWithYa"
+            inword = inword + "Y"
         if inword.endswith("ясь") or inword.endswith("ЯСЬ"):
-            inword = inword +"EndsWithYas"
+            inword = inword +"S"
         outputs = fst.lookup(inword)
         output = [w for w, wt in outputs][0]
         if (output != truth[index]):
