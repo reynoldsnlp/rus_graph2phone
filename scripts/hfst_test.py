@@ -21,16 +21,10 @@ def get_fst(start_rule, end_rule, *args):
         for i in range(args[0], args[1]+1):
             rule_numbers.add(i)
 
-    #print(rule_numbers)
-
     rule_fsts = []
     for index, rule in enumerate(rule_fsts_stream):
         if index in rule_numbers:
             rule_fsts.append(rule)
-
-    # What rules are we intersecting?
-    #for rule in rule_fsts:
-    #    print(rule.get_name())
 
     print('Creating universal language FST...', file=sys.stderr)
     output = hfst.regex('?* ;')
