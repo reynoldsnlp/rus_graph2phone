@@ -6,7 +6,7 @@ import csv
 import re
 
 def get_fst(start_rule, end_rule, *args):
-    src = Path('reflexive.twolc')
+    src = Path('g2p.twolc')
     tmp = Path('g2p_test_from_py.tmp.hfst')
     hfst.compile_twolc_file(src.name, tmp.name,
                                 resolve_left_conflicts=True)
@@ -32,7 +32,7 @@ def get_fst(start_rule, end_rule, *args):
           file=sys.stderr)
     output.compose_intersect(rule_fsts)
     print('Optimizing for fast lookup...', file=sys.stderr)
-    #output.lookup_optimize()
+    output.lookup_optimize()
     return output
 
 

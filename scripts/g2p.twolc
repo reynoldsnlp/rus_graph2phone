@@ -15,7 +15,7 @@ Alphabet
       б в г д ж з й к л м н п р с т ф х ц ч ш щ
       ъ:0 ь:0
       а   е   ё:о́ и  о у ы э   ю:у я   ʌ
-      а́ â е́:э́ ё́   и́  о́ у́ ы́ э́ э̂ ю́:у́ я́:а́ '    ! ё́ is included to broaden coverage
+      а́ â е́:э́ ё́   и́  о́ у́ ы́ э́ э̂ ю́:у́ я́:а́ 0:'    ! ё́ is included to broaden coverage
       а̀   ѐ   ё̀   ѝ  о̀ у̀ ы̀ э̀   ю̀   я̀ ;
 
 Sets
@@ -85,16 +85,11 @@ ReflexiveEnding2 = [ С: | с: ] [ Я: | я: ] ;
 Rules
 
 !! ============================================================================
-"Rule 00a: Soften consonants before 'soft' vowels and ь (excluding { Ж ж Ц ц Ш ш Ч ч Щ щ Й й })"
-0:' <=> CNoSoftHard: _ [ SoftV: | ь: | Ь: ] [: - [ Y: | P: ]]* .#. ;
-
-!! ============================================================================
-"Rule 00b: Soften consonants before non-reflexive endings for Y and P before 'soft' vowels and ь (excluding { Ж ж Ц ц Ш ш Ч ч Щ щ Й й })"
-0:' <=> CNoSoftHard: _ [ Я: | я: ] :* :C :* [ Y: | P: ]+ .#. ;
-
-!! ============================================================================
-"Rule 00c: Soften consonants before 'soft' vowels and ь (excluding { Ж ж Ц ц Ш ш Ч ч Щ щ Й й })"
-0:' <=> CNoSoftHard: _ [[SoftV: - [ Я: | я: ]] | ь: | Ь: ] [:* - [ReflexiveEnding | ReflexiveEnding2]] [ Y: | P: ]+ .#. ;
+"Rule 00: Soften consonants before 'soft' vowels and ь (excluding { Ж ж Ц ц Ш ш Ч ч Щ щ Й й })"
+0:' <=> [CNoSoftHard: - [ Т: | т: | С: | с: ]] _ [ SoftV: | ь: | Ь: ] ;
+        [ Т: | т: ] _ [ ь: | Ь: ] [: - [ С: | с: ]] ;
+        [ Т: | т: ] _ [ SoftV: ] ;
+        [: - [ Т: | т: ]] [ ь: | Ь: ] [ С: | с: ] _ [ SoftV: | ь: | Ь: ] ;
 
 !! ============================================================================
 "Rule 01: 0>й (lowercase) between vowels, word-initially, and after hard-/soft-signs"
@@ -195,11 +190,34 @@ where Cx in ( Б б В в Г г Д д Ж ж З з )
   matched ;
 
 !! ============================================================================
-"Rule 15: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
-Cx:Cy <=>  _ [ :' | :0 ]* :VoicedPairedCNoB [:* - [[ Я: | я: ] .#.]] ;
-where Cx in ( П п Ф ф К к Т т Ш ш С с )
-      Cy in ( Б б В в Г г Д д Ж ж З з )
+!"Rule 15: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
+!Cx:Cy <=>  _ [ :' | :0 ]* :VoicedPairedCNoB [:* - [[ Я: | я: ] .#.]] ;
+!where Cx in ( П п Ф ф К к Т т Ш ш С с )
+!      Cy in ( Б б В в Г г Д д Ж ж З з )
+!  matched ;  TCБ
+
+!! ============================================================================
+"Rule 15a: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
+Cx:Cy <=>  _ [ :' | :0 ]* :VoicedPairedCNoB ;
+where Cx in ( П п Ф ф К к Ш ш )
+      Cy in ( Б б В в Г г Ж ж )
   matched ;
+
+!! ============================================================================
+"Rule 15b: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
+Cx:Cy <=>  _ ( :' ) ( Ь:0 | ь:0 ) [:VoicedPairedCNoB - [ С: | с: ]] ;
+where Cx in ( Т т )
+      Cy in ( Д д )
+  matched ;
+
+!! ============================================================================
+"Rule 15c: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
+Cx:Cy <=> [: - [ Т: | т: ]] ( :' ) ( Ь:0 | ь:0 ) _ ( :' ) ( Ь:0 | ь:0 ) :VoicedPairedCNoB ;
+where Cx in ( С с )
+      Cy in ( З з )
+  matched ;
+
+  ! Т Ь:0 С Б
 
 !! ============================================================================
 "Rule 16: Softness Assimilation: Dentals"
@@ -234,17 +252,14 @@ where Vx in ( Я я )
 
 !! ============================================================================
 "Rule 21: Conversion of { т } in endings { тся } to { ц }"
-Vx:Vy <=> _ [ Ь: | ь: ]* [ С:0 | с:0 ] [ Я: | я: ] [ Y: | P: ]* .#. ;
+Vx:Vy <=> _ ( Ь: | ь: ) [ С: | с: ] ;
 where Vx in ( Т т )
       Vy in ( Ц ц )
   matched ;
 
 !! ============================================================================
 "Rule 22: Conversion of { с } in endings { тся } to { 0 }"
-Vx:Vy <=> [ т: | Т: ] [ Ь: | ь: ]* _ [ Я: | я: ] [ Y: | P: ]* .#. ;
+Vx:Vy <=> [ т: | Т: ] ( Ь: | ь: ) _ ;
 where Vx in ( С с )
       Vy in ( 0 0 )
   matched ;
-
-!TODO:
-!!! в коридоре -> get rid of spaces
