@@ -2,7 +2,7 @@
 cat test.csv | cut -d "," -f 1 > /tmp/g2p_lex-test.txt
 
 # compiles FST
-printf "read-grammar g2p.twolc
+printf "read-grammar reflexive.twolc
 compile
 intersect
 y
