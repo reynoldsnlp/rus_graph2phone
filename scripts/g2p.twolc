@@ -190,13 +190,6 @@ where Cx in ( Б б В в Г г Д д Ж ж З з )
   matched ;
 
 !! ============================================================================
-!"Rule 15: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
-!Cx:Cy <=>  _ [ :' | :0 ]* :VoicedPairedCNoB [:* - [[ Я: | я: ] .#.]] ;
-!where Cx in ( П п Ф ф К к Т т Ш ш С с )
-!      Cy in ( Б б В в Г г Д д Ж ж З з )
-!  matched ;  TCБ
-
-!! ============================================================================
 "Rule 15a: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
 Cx:Cy <=>  _ [ :' | :0 ]* :VoicedPairedCNoB ;
 where Cx in ( П п Ф ф К к Ш ш )
@@ -212,34 +205,26 @@ where Cx in ( Т т )
 
 !! ============================================================================
 "Rule 15c: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
-Cx:Cy <=> [: - [ Т: | т: ]] ( :' ) ( Ь:0 | ь:0 ) _ ( :' ) ( Ь:0 | ь:0 ) :VoicedPairedCNoB ;
+Cx:Cy <=> .#. [:* - [:* [ Т: | т: ]]] ( :' ) ( Ь:0 | ь:0 ) _ ( :' ) ( Ь:0 | ь:0 ) :VoicedPairedCNoB ;
 where Cx in ( С с )
       Cy in ( З з )
   matched ;
 
-  ! Т Ь:0 С Б
-
 !! ============================================================================
-"Rule 16: Softness Assimilation: Dentals"
+"Rule 16: Softness Assimilation: Dentals, Labials, Velars"
 0:' <=> :DEN _ :DEN :' ;
+        :LAB _ :LAB :' ;
+        :VEL _ :VEL :' ;
 
 !! ============================================================================
-"Rule 17: Softness Assimilation: Labials"
-0:' <=> :LAB _ :LAB :' ;
-
-!! ============================================================================
-"Rule 18: Softness Assimilation: Velar"
-0:' <=> :VEL _ :VEL :' ;
-
-!! ============================================================================
-"Rule 19: Conversion of г to в"
+"Rule 17: Conversion of г to в"
 Vx:Vy <=> [ о: | о́: | е: | О: | О́: | Е: ] _ [ о: | о́: | О: | О́:] G: YaEndings:* .#. ;
 where Vx in ( Г г )
       Vy in ( В в )
   matched ;
 
 !! ============================================================================
-"Rule 20: я in Endings"
+"Rule 18: я in Endings"
 Vx:Vy <=> _ [ т: | Т: ] P: .#. ;               !P ят
           _ [ х: | Х: ] L: .#. ;               !L ях
           _ [ м: | М: ] D: .#. ;               !D ям
@@ -251,14 +236,14 @@ where Vx in ( Я я )
   matched ;
 
 !! ============================================================================
-"Rule 21: Conversion of { т } in endings { тся } to { ц }"
+"Rule 19: Conversion of { т } in endings { тся } to { ц }"
 Vx:Vy <=> _ ( Ь: | ь: ) [ С: | с: ] ;
 where Vx in ( Т т )
       Vy in ( Ц ц )
   matched ;
 
 !! ============================================================================
-"Rule 22: Conversion of { с } in endings { тся } to { 0 }"
+"Rule 20: Conversion of { с } in endings { тся } to { 0 }"
 Vx:Vy <=> [ т: | Т: ] ( Ь: | ь: ) _ ;
 where Vx in ( С с )
       Vy in ( 0 0 )

@@ -91,20 +91,6 @@ Rules
         [: - [ Т: | т: ]] [ ь: | Ь: ] [ С: | с: ] _ [ SoftV: | ь: | Ь: ] ;
 
 !! ============================================================================
-"Rule 15a: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
-Cx:Cy <=>  _ [ :' | :0 ]* :VoicedPairedCNoB ;
-where Cx in ( П п Ф ф К к Ш ш С с )
-      Cy in ( Б б В в Г г Ж ж З з )
-  matched ;
-
-!! ============================================================================
-"Rule 15b: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
-Cx:Cy <=>  _ [ :' | :0 ]* [:VoicedPairedCNoB - [ :С | :с ]] ;
-where Cx in ( Т т )
-      Cy in ( Д д )
-  matched ;
-
-!! ============================================================================
 "Rule 21: Conversion of { т } in endings { тся } to { ц }"
 Vx:Vy <=> _ ( Ь: | ь: ) [ С: | с: ] ;
 where Vx in ( Т т )
@@ -113,10 +99,47 @@ where Vx in ( Т т )
 
 !! ============================================================================
 "Rule 22: Conversion of { с } in endings { тся } to { 0 }"
-Vx:Vy <=> [ т: | Т: ] ( Ь: | ь: ) _ ;
+Vx:Vy <=> [ т:ц | Т:Ц ] ( Ь: | ь: ) _ ;
 where Vx in ( С с )
       Vy in ( 0 0 )
   matched ;
+
+!! ============================================================================
+"Rule 13: Voice Assimilation: Final devoicing"
+Cx:Cy <=> _ [ :' | :0 ]* [ G: | YaEndings: ]* .#. ;
+where Cx in ( Б б В в Г г Д д Ж ж З з )
+      Cy in ( П п Ф ф К к Т т Ш ш С с )
+  matched ;
+
+!! ============================================================================
+"Rule 14: Unvoiced Assimilation: Consonant clusters with unvoiced consonant at end of the cluster"
+Cx:Cy <=>  _ [ :' | :0 ]* :UnvoicedPairedC ;
+where Cx in ( Б б В в Г г Д д Ж ж З з )
+      Cy in ( П п Ф ф К к Т т Ш ш С с )
+  matched ;
+
+!! ============================================================================
+"Rule 15a: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
+Cx:Cy <=>  _ [ :' | :0 ]* :VoicedPairedCNoB ;
+where Cx in ( П п Ф ф К к Ш ш )
+      Cy in ( Б б В в Г г Ж ж )
+  matched ;
+
+!! ============================================================================
+"Rule 15b: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
+Cx:Cy <=>  _ ( :' ) ( Ь:0 | ь:0 ) [:VoicedPairedCNoB - [ С: | с: ]] ;
+where Cx in ( Т т )
+      Cy in ( Д д )
+  matched ;
+
+!! ============================================================================
+"Rule 15c: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
+Cx:Cy <=> .#. [:* - [:* [ Т: | т: ]]] ( :' ) ( Ь:0 | ь:0 ) _ ( :' ) ( Ь:0 | ь:0 ) :VoicedPairedCNoB ;
+where Cx in ( С с )
+      Cy in ( З з )
+  matched ;
+
+
 
 
 !This is garbage for spacing
