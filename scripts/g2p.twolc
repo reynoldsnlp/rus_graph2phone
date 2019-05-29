@@ -11,13 +11,12 @@ Alphabet
       Ъ:0 Ь:0
       А   Е   Ё:О́ И О У Ы Э   Ю:У Я
       А́ А̂ Е́:Э́ Ё́   И́ О́ У́ Ы́ Э́ Э̂ Ю́:У́ Я́:А́
-      А̀   Ѐ   Ё̀   Ѝ О̀ У̀ Ы̀ Э̀   Ю̀   Я̀
 
       б в г д ж з й к л м н п р с т ф х ц ч ш щ
       ъ:0 ь:0
       а   е   ё:о́ и  о у ы э   ю:у я   ʌ
       а́ â е́:э́ ё́   и́  о́ у́ ы́ э́ э̂ ю́:у́ я́:а́ 0:'    ! ё́ is included to broaden coverage
-      а̀   ѐ   ё̀   ѝ  о̀ у̀ ы̀ э̀   ю̀   я̀ ;
+      ;
 
 Sets
 
@@ -82,7 +81,7 @@ Definitions
 
 Rules
 
-! TODO: соотве́тствовать - с!ʌ!ʌтв'э́тствъвът', как дела - across word boundaries
+! TODO: как дела - across word boundaries
 
 !! ============================================================================
 "Rule 00: Soften consonants before 'soft' vowels and ь (excluding { Ж ж Ц ц Ш ш Ч ч Щ щ Й й })"
@@ -117,11 +116,25 @@ where Vx in ( О о А а )
   matched ;
 
 !! ============================================================================
-"Rule 05: Akanje: Unstressed vowel reduction for { о а } in non-pre-tonic and post-tonic location"
-Vx:Vy <=> [: - .#.] _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
-          StressedV: :* _ [: - StressedV:]* .#. ;
+"Rule 05a: Akanje: Unstressed vowel reduction for { о а } in non-pre-tonic and post-tonic location"
+Vx:Vy <=> [: - .#.] _ [: - [StressedV: | :ʌ]] [[ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
+          StressedV: :* _ [: - [StressedV: | :ʌ]]* .#. ;
 where Vx in ( О о А а )
       Vy in ( Ъ ъ Ъ ъ )
+  matched ;
+
+!! ============================================================================
+"Rule 05b: Akanje: Unstressed vowel reduction for { о а } in non-pre-tonic"
+Vx:Vy <=> [: - .#.] _ [ О:ʌ | о:ʌ ] ;
+where Vx in ( О о )
+      Vy in ( ʌ ʌ )
+  matched ;
+
+!! ============================================================================
+"Rule 05c: Akanje: Unstressed vowel reduction for { о а } in non-pre-tonic"
+Vx:Vy <=> [: - .#.] _ [ А:ʌ | а:ʌ ] ;
+where Vx in ( А а )
+      Vy in ( ʌ ʌ )
   matched ;
 
 !! ============================================================================

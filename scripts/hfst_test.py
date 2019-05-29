@@ -73,7 +73,7 @@ def test_words():
         text.append(row[0])
         truth.append(row[1])
     start_rule = 0
-    end_rule = 18
+    end_rule = 24
     test(text, truth, start_rule, end_rule)
 
 def test_softness():
