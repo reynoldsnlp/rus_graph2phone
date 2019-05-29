@@ -1,0 +1,116 @@
+
+Alphabet
+
+      G:0 P:0 L:0 D:0 I:0 Y:0 S:0  ! Udar Morphology
+      !Gen Pl3 Loc Dat Ins -я -ясь
+
+      %  ! space
+      %-
+
+      Б В Г Д Ж З Й К Л М Н П Р С Т Ф Х Ц Ч Ш Щ
+      Ъ:0 Ь:0
+      А   Е   Ё:О́ И О У Ы Э   Ю:У Я
+      А́ А̂ Е́:Э́ Ё́   И́ О́ У́ Ы́ Э́ Э̂ Ю́:У́ Я́:А́
+      А̀   Ѐ   Ё̀   Ѝ О̀ У̀ Ы̀ Э̀   Ю̀   Я̀
+
+      б в г д ж з й к л м н п р с т ф х ц ч ш щ
+      ъ:0 ь:0
+      а   е   ё:о́ и  о у ы э   ю:у я   ʌ
+      а́ â е́:э́ ё́   и́  о́ у́ ы́ э́ э̂ ю́:у́ я́:а́ 0:'    ! ё́ is included to broaden coverage
+      а̀   ѐ   ё̀   ѝ  о̀ у̀ ы̀ э̀   ю̀   я̀ ;
+
+Sets
+
+! Consonants
+C = Б В Г Д Ж З Й К Л М Н П Р С Т Ф Х Ц Ч Ш Щ
+    б в г д ж з й к л м н п р с т ф х ц ч ш щ ;
+
+! Consonants, excluding { Ж ж Й й Ч ч Ш ш Щ щ Ц ц }
+CNoSoftHard = Б В Г Д З К Л М Н П Р С Т Ф Х
+              б в г д з к л м н п р с т ф х ;
+
+! Unvoiced and paired consonants
+UnvoicedPairedC = К П С Т Ф Ш
+                  к п с т ф ш ;
+
+! Voiced and paired consonants
+VoicedPairedCNoB = Б Г Д Ж З
+                   б г д ж з ;
+
+! Soft consonants
+SoftC = Й Ч Щ
+        й ч щ ;
+
+! Hard consonants
+HardC = Ж Ц Ш
+        ж ц ш ;
+
+! Labials for Softness Assimilation
+LAB = Б б В в М м П п Ф ф ;
+
+! Dentals for Softness Assimilation
+DEN = Д д З з Л л Н н Р р С с Т т Ц ц ;
+
+! Velars for Softness Assimilation
+VEL = Г г К к Х х ;
+
+! Vowels
+V = А Е Ё И О У Ы Э Ю Я
+    А́ Е́ Ё́ И́ О́ У́ Ы́ Э́ Ю́ Я́
+    А̀ Ѐ Ё̀ Ѝ О̀ У̀ Ы̀ Э̀ Ю̀ Я̀
+    а е ё и о у ы э ю я
+    а́ е́ ё́ и́ о́ у́ ы́ э́ ю́ я́
+    а̀ ѐ ё̀ ѝ о̀ у̀ ы̀ э̀ ю̀ я̀ ;
+
+! Stressed vowels
+StressedV = А́ Е́ Ё́ Ё И́ О́ У́ Ы́ Э́ Ю́ Я́
+            а́ е́ ё́ ё и́ о́ у́ ы́ э́ ю́ я́ ;
+
+! Unstressed vowels
+UnstressedV = А Е И О У Ы Э Ю Я
+              а е и о у ы э ю я ;
+
+! Vowels that indicate softness
+SoftV = Е Ё И Ю Я
+        Е́ Ё́ И́ Ю́ Я́
+        е ё и ю я
+        е́ ё́ и́ ю́ я́ ;
+
+YaEndings = P L D I Y S ;
+
+Definitions
+
+Rules
+
+!! ============================================================================
+"Rule 18: Conversion of г to в"
+Vx:Vy <=> [ о: | о́: | е: | О: | О́: | Е: ] _ [ о: | о́: | О: | О́:] G: YaEndings:* .#. ;
+where Vx in ( Г г )
+      Vy in ( В в )
+  matched ;
+
+!! ============================================================================
+"Rule 19: я in Endings"
+Vx:Vy <=> _ [ т: | Т: ] P: .#. ;               !P ят
+          _ [ х: | Х: ] L: .#. ;               !L ях
+          _ [ м: | М: ] D: .#. ;               !D ям
+          _ [ м: | М: ] :' [ и: |  И: ] I: .#. ;  !I ями
+          _ G:* YaEndings:* Y: .#. ;                       !Y я
+          _ [ с: | С: ] [ ь: | Ь: ] S: .#. ;   !S ясь
+where Vx in ( Я я )
+      Vy in ( Ъ ъ )
+  matched ;
+
+!! ============================================================================
+"Rule 20: Conversion of { т } in endings { тся } to { ц }"
+Vx:Vy <=> _ ( Ь: | ь: ) [ С: | с: ] ;
+where Vx in ( Т т )
+      Vy in ( Ц ц )
+  matched ;
+
+!! ============================================================================
+"Rule 21: Conversion of { с } in endings { тся } to { 0 }"
+Vx:Vy <=> [ т: | Т: ] ( Ь: | ь: ) _ ;
+where Vx in ( С с )
+      Vy in ( 0 0 )
+  matched ;
