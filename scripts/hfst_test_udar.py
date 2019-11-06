@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+import udar
 import hfst
 import csv
 import re
@@ -36,9 +37,25 @@ def get_fst(start_rule, end_rule, *args):
 
 
 def test(text, truth, start_rule, end_rule, *args):
-    fst = get_fst(start_rule, end_rule, *args)
+    fst = get_fst(start_rule, end_rule, *args);
+    analyzer = udar.Udar('analyzer')
     print('Processing test words...', file=sys.stderr)
     for index, inword in enumerate(text):  # for inword, output in words:
+        token = analyzer.lookup(inword)
+        if 'Gen' in token:
+            inword = inword + "G"
+        if 'Pl3' in token:
+            inword = inword + "P"
+        if 'Loc' in token:
+            inword = inword + "L"
+        if 'Dat' in token:
+            inword = inword + "D"
+        if 'Ins' in token:
+            inword = inword + "I"
+        if inword.endswith("я") or inword.endswith("Я"):
+            inword = inword + "Y"
+        if inword.endswith("ясь") or inword.endswith("ЯСЬ"):
+            inword = inword +"S"
         outputs = fst.lookup(inword)
         output = [w for w, wt in outputs][0]
         if (output != truth[index]):
