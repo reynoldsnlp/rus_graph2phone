@@ -38,22 +38,18 @@ gt-g2p.tmp1.hfst : g2p_lexicon.hfst ${GT_RUS}/phonology/rus-phon.compose.hfst
 	hfst-determinize g2p_lexicon.hfst \
 		| hfst-minimize \
 		| hfst-compose-intersect -2 ${GT_RUS}/phonology/rus-phon.compose.hfst \
+		| hfst-determinize \
 		| hfst-minimize \
 		> gt-g2p.tmp1.hfst
 
-gt-g2p.tmp2.hfst : gt-g2p.tmp1.hfst g2p.phon.hfst
-	hfst-compose-intersect -1 gt-g2p.tmp1.hfst -2 g2p.phon.hfst \
-		| hfst-minimize \
-		> gt-g2p.tmp2.hfst
-
 gt-g2p.tmp3.hfst : ${GT_RUS}/filters/reorder-subpos-tags.hfst \
 		${GT_RUS}/filters/reorder-semantic-tags.hfst \
-		gt-g2p.tmp2.hfst
+		gt-g2p.tmp1.hfst
 	echo "applying filters..."
 	printf "read regex \
 		@\"${GT_RUS}/filters/reorder-subpos-tags.hfst\" \
 		.o. @\"${GT_RUS}/filters/reorder-semantic-tags.hfst\" \
-		.o. @\"gt-g2p.tmp2.hfst\" \
+		.o. @\"gt-g2p.tmp1.hfst\" \
 		;\n \
 		 save stack gt-g2p.tmp3.hfst\n \
 		quit\n" \
@@ -82,8 +78,7 @@ gt-g2p.tmp4.hfst : ${GT_RUS}/filters/make-optional-transitivity-tags.hfst \
 		${GT_RUS}/orthography/downcase-derived_proper-strings.compose.hfst \
 		${GT_RUS}/filters/remove-hyphenation-marks.hfst \
 		${GT_RUS}/filters/remove-infl_deriv-borders.hfst \
-		${GT_RUS}/filters/remove-word-boundary.hfst \
-
+		${GT_RUS}/filters/remove-word-boundary.hfst
 	printf "read regex \
 		@\"${GT_RUS}/filters/make-optional-transitivity-tags.hfst\"  \
 		.o. @\"${GT_RUS}/filters/make-optional-homonymy-tags.hfst\"  \
@@ -114,15 +109,22 @@ gt-g2p.tmp4.hfst : ${GT_RUS}/filters/make-optional-transitivity-tags.hfst \
 		quit\n" \
 		| /usr/local/bin/hfst-xfst -p -v --format=openfst-tropical
 
+gt-g2p.tmp5.hfst : gt-g2p.tmp4.hfst g2p.phon.hfst
+	hfst-compose-intersect -1 gt-g2p.tmp4.hfst -2 g2p.phon.hfst \
+		| hfst-determinize \
+		| hfst-minimize \
+		| hfst-remove-epsilons \
+		> gt-g2p.tmp5.hfst
+
 gt-g2p.hfst : ${GT_RUS}/filters/make-optional-cyrillic-jo.hfst \
 		${GT_RUS}/filters/make-ambiguous-AnIn.hfst \
 		${GT_RUS}/filters/make-ambiguous-MFN.hfst \
-		gt-g2p.tmp4.hfst
+		gt-g2p.tmp5.hfst
 	printf "read regex \
 		@\"${GT_RUS}/filters/make-optional-cyrillic-jo.hfst\" \
 		.o. @\"${GT_RUS}/filters/make-ambiguous-AnIn.hfst\" \
 		.o. @\"${GT_RUS}/filters/make-ambiguous-MFN.hfst\" \
-		.o. @\"gt-g2p.tmp4.hfst\" \
+		.o. @\"gt-g2p.tmp5.hfst\" \
 		;\n \
 		save stack gt-g2p.hfst\n \
 		quit\n" \
@@ -130,7 +132,9 @@ gt-g2p.hfst : ${GT_RUS}/filters/make-optional-cyrillic-jo.hfst \
 
 gt-g2p.hfstol : gt-g2p.hfst
 	echo "converting to optimized lookup format..."
-	hfst-fst2fst -O -i gt-g2p.hfst -o gt-g2p.hfstol
+	hfst-determinize gt-g2p.hfst \
+		| hfst-minimize \
+		| hfst-fst2fst -O -o gt-g2p.hfstol
 
 univ.hfst : 
 	echo "creating base FST with universal language..."
@@ -138,7 +142,7 @@ univ.hfst :
 
 g2p.hfst : g2p.phon.hfst univ.hfst
 	echo "compose-intersecting twolc rules with universal FST..."
-	hfst-compose-intersect univ.hfst g2p.tmp.hfst \
+	hfst-compose-intersect univ.hfst g2p.phon.hfst \
 		| hfst-minimize \
 		> g2p.hfst
 
