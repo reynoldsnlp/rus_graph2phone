@@ -1,6 +1,6 @@
 GT_RUS=${HOME}/gt/langs/rus/src
 
-all : gt-g2p.hfstol \
+all : generator-gt-desc.phonetic.hfstol \
 	g2p.hfstol \
 	g2p.xfst \
 	g2p_lex-test.txt
@@ -13,7 +13,7 @@ g2p.phon.hfst : g2p.twolc
 	echo "compiling hfst file..."
 	hfst-twolc -i g2p.twolc -o g2p.phon.hfst
 
-g2p_lexicon.hfst : ${GT_RUS}/morphology/lexicon.tmp.lexc
+lexicon.phonetic.hfst : ${GT_RUS}/morphology/lexicon.tmp.lexc
 	echo "building custom lexicon.hfst with ∂ and Ω for в and ъ ..."
 	cat ${GT_RUS}/morphology/lexicon.tmp.lexc \
 		| sed -E "s/(\+Dat|\+Ins|\+Loc)(.*>)а([мтх]и)/\1\2Ω\3/g" \
@@ -31,31 +31,31 @@ g2p_lexicon.hfst : ${GT_RUS}/morphology/lexicon.tmp.lexc
 		| sed -E "s/(:то)г(о́)/\1∂\2/g" \
 		| sed -E "s/(то)г(о.% что)/\1∂\2/g" \
 		| sed -E "s/(:че)г(о)/\1∂\2/g" \
-		| hfst-lexc -v --format=openfst-tropical --alignStrings -o g2p_lexicon.hfst
+		| hfst-lexc -v --format=openfst-tropical --alignStrings -o lexicon.phonetic.hfst
 
-gt-g2p.tmp1.hfst : g2p_lexicon.hfst ${GT_RUS}/phonology/rus-phon.compose.hfst
+generator-gt-desc.phonetic.tmp1.hfst : lexicon.phonetic.hfst ${GT_RUS}/phonology/rus-phon.compose.hfst
 	echo "compose-intersecting with standard twolc rules ..."
-	hfst-determinize g2p_lexicon.hfst \
+	hfst-determinize lexicon.phonetic.hfst \
 		| hfst-minimize \
 		| hfst-compose-intersect -2 ${GT_RUS}/phonology/rus-phon.compose.hfst \
 		| hfst-determinize \
 		| hfst-minimize \
-		> gt-g2p.tmp1.hfst
+		> generator-gt-desc.phonetic.tmp1.hfst
 
-gt-g2p.tmp3.hfst : ${GT_RUS}/filters/reorder-subpos-tags.hfst \
+generator-gt-desc.phonetic.tmp3.hfst : ${GT_RUS}/filters/reorder-subpos-tags.hfst \
 		${GT_RUS}/filters/reorder-semantic-tags.hfst \
-		gt-g2p.tmp1.hfst
+		generator-gt-desc.phonetic.tmp1.hfst
 	echo "applying filters..."
 	printf "read regex \
 		@\"${GT_RUS}/filters/reorder-subpos-tags.hfst\" \
 		.o. @\"${GT_RUS}/filters/reorder-semantic-tags.hfst\" \
-		.o. @\"gt-g2p.tmp1.hfst\" \
+		.o. @\"generator-gt-desc.phonetic.tmp1.hfst\" \
 		;\n \
-		 save stack gt-g2p.tmp3.hfst\n \
+		 save stack generator-gt-desc.phonetic.tmp3.hfst\n \
 		quit\n" \
 		| hfst-xfst -p -v --format=openfst-tropical
 
-gt-g2p.tmp4.hfst : ${GT_RUS}/filters/make-optional-transitivity-tags.hfst \
+generator-gt-desc.phonetic.tmp4.hfst : ${GT_RUS}/filters/make-optional-transitivity-tags.hfst \
 		${GT_RUS}/filters/make-optional-homonymy-tags.hfst \
 		${GT_RUS}/filters/make-optional-hyph-tags.hfst \
 		${GT_RUS}/filters/make-optional-variant-tags.hfst \
@@ -74,7 +74,7 @@ gt-g2p.tmp4.hfst : ${GT_RUS}/filters/make-optional-transitivity-tags.hfst \
 		${GT_RUS}/filters/remove-Use_minusGC-tags.hfst \
 		${GT_RUS}/filters/remove-Use_PMatch-strings.hfst \
 		${GT_RUS}/filters/remove-mwe-tags.hfst \
-		gt-g2p.tmp3.hfst \
+		generator-gt-desc.phonetic.tmp3.hfst \
 		${GT_RUS}/orthography/downcase-derived_proper-strings.compose.hfst \
 		${GT_RUS}/filters/remove-hyphenation-marks.hfst \
 		${GT_RUS}/filters/remove-infl_deriv-borders.hfst \
@@ -99,42 +99,42 @@ gt-g2p.tmp4.hfst : ${GT_RUS}/filters/make-optional-transitivity-tags.hfst \
 		.o. @\"${GT_RUS}/filters/remove-Use_minusGC-tags.hfst\"      \
 		.o. @\"${GT_RUS}/filters/remove-Use_PMatch-strings.hfst\"    \
 		.o. @\"${GT_RUS}/filters/remove-mwe-tags.hfst\"              \
-		.o. @\"gt-g2p.tmp3.hfst\" \
+		.o. @\"generator-gt-desc.phonetic.tmp3.hfst\" \
 		.o. @\"${GT_RUS}/orthography/downcase-derived_proper-strings.compose.hfst\" \
 		.o. @\"${GT_RUS}/filters/remove-hyphenation-marks.hfst\"        \
 		.o. @\"${GT_RUS}/filters/remove-infl_deriv-borders.hfst\"       \
 		.o. @\"${GT_RUS}/filters/remove-word-boundary.hfst\"            \
 		;\n \
-		save stack gt-g2p.tmp4.hfst\n \
+		save stack generator-gt-desc.phonetic.tmp4.hfst\n \
 		quit\n" \
 		| /usr/local/bin/hfst-xfst -p -v --format=openfst-tropical
 
-gt-g2p.tmp5.hfst : gt-g2p.tmp4.hfst g2p.phon.hfst
-	hfst-compose-intersect -1 gt-g2p.tmp4.hfst -2 g2p.phon.hfst \
+generator-gt-desc.phonetic.tmp5.hfst : generator-gt-desc.phonetic.tmp4.hfst g2p.phon.hfst
+	hfst-compose-intersect -1 generator-gt-desc.phonetic.tmp4.hfst -2 g2p.phon.hfst \
 		| hfst-determinize \
 		| hfst-minimize \
 		| hfst-remove-epsilons \
-		> gt-g2p.tmp5.hfst
+		> generator-gt-desc.phonetic.tmp5.hfst
 
-gt-g2p.hfst : ${GT_RUS}/filters/make-optional-cyrillic-jo.hfst \
+generator-gt-desc.phonetic.hfst : ${GT_RUS}/filters/make-optional-cyrillic-jo.hfst \
 		${GT_RUS}/filters/make-ambiguous-AnIn.hfst \
 		${GT_RUS}/filters/make-ambiguous-MFN.hfst \
-		gt-g2p.tmp5.hfst
+		generator-gt-desc.phonetic.tmp5.hfst
 	printf "read regex \
 		@\"${GT_RUS}/filters/make-optional-cyrillic-jo.hfst\" \
 		.o. @\"${GT_RUS}/filters/make-ambiguous-AnIn.hfst\" \
 		.o. @\"${GT_RUS}/filters/make-ambiguous-MFN.hfst\" \
-		.o. @\"gt-g2p.tmp5.hfst\" \
+		.o. @\"generator-gt-desc.phonetic.tmp5.hfst\" \
 		;\n \
-		save stack gt-g2p.hfst\n \
+		save stack generator-gt-desc.phonetic.hfst\n \
 		quit\n" \
 		| /usr/local/bin/hfst-xfst -p -v --format=openfst-tropical
 
-gt-g2p.hfstol : gt-g2p.hfst
+generator-gt-desc.phonetic.hfstol : generator-gt-desc.phonetic.hfst
 	echo "converting to optimized lookup format..."
-	hfst-determinize gt-g2p.hfst \
+	hfst-determinize generator-gt-desc.phonetic.hfst \
 		| hfst-minimize \
-		| hfst-fst2fst -O -o gt-g2p.hfstol
+		| hfst-fst2fst -O -o generator-gt-desc.phonetic.hfstol
 
 univ.hfst : 
 	echo "creating base FST with universal language..."
@@ -162,7 +162,7 @@ g2p.lookup.xfst : g2p.xfst
 
 .PHONY : clean
 clean :
-	-rm *.hfst *.hfstol
+	-rm *.hfst *.hfstol *.xfst
 
 .PHONY : check
 check : all
